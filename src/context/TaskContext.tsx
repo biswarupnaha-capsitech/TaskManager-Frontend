@@ -1,65 +1,70 @@
 import {
     createContext,
     useContext,
-    useEffect,
     useState,
     type ReactNode,
 } from "react"
 
-import type { Task } from "../types/Interfaces"
-
-interface TaskContextType {
-    tasks: Task[]
-    addTask: (values: Omit<Task, "id">) => void
-    updateTask: (id: string, updates: Partial<Task>) => void
-    deleteTask: (id: string) => void
-}
+import type { Task, TaskContextType, TaskResponseType } from "../common/types"
+import { createTask, updateTask, deleteTask, getTasks } from "../api/taskService"
 
 const TaskContext = createContext<TaskContextType | null>(null)
 
 export function TaskProvider({ children }: { children: ReactNode }) {
-    const [tasks, setTasks] = useState<Task[]>(() => {
-        const stored = localStorage.getItem("tasks")
+    const [tasks, setTasks] = useState<Task[]>([]);
 
-        if (!stored) return []
 
-        return JSON.parse(stored)
-    })
 
-    useEffect(() => {
-        localStorage.setItem("tasks", JSON.stringify(tasks))
-    }, [tasks])
+    async function fetchTasks() {
+        const data = await getTasks();
+        const tasks: Task[] = data?.result;
+        setTasks(prev => {
+            const map = new Map(prev.map(task => [task.id, task]));
 
-    function addTask(values: Omit<Task, "id">) {
-        const newTask: Task = {
-            id: crypto.randomUUID(),
-            ...values
-        }
+            tasks.forEach(task => {
+                map.set(task.id, task);
+            });
 
-        setTasks(prev => [...prev, newTask])
+            return Array.from(map.values());
+        });
+        return { msg: data?.message, status: data?.status };
     }
 
-    function updateTask(id: string, updates: Partial<Task>) {
+    async function addTask(values: Omit<Task, "id">): Promise<TaskResponseType> {
+        const data = await createTask(values);
+        const newTask = data?.result;
+        setTasks(prev => [...prev, newTask])
+        return { msg: data?.message, status: data?.status };
+    }
+
+    async function editTask(id: string, updates: Partial<Task>): Promise<TaskResponseType> {
+        const data = await updateTask(id, updates)
         setTasks(prev =>
             prev.map(task =>
                 task.id === id
                     ? { ...task, ...updates }
                     : task
             )
-        )
+        );
+        return { msg: data?.message, status: data?.status };
     }
 
-    function deleteTask(id: string) {
-        setTasks(prev => prev.filter(task => task.id !== id))
+    async function removeTask(id: string): Promise<TaskResponseType> {
+        const data = await deleteTask(id);
+        setTasks(prev => prev.filter(task => task.id !== id));
+        return { msg: data?.message, status: data?.status };
     }
+
+
 
     return (
         <TaskContext.Provider
             value={{
                 tasks,
+                fetchTasks,
                 addTask,
-                updateTask,
-                deleteTask,
+                editTask,
+                removeTask,
             }}
         >
             {children}
