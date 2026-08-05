@@ -17,7 +17,8 @@ const TaskForm = ({
     const { addTask, updateTask } = useTasks();
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div
+            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}>
             <div className="w-full max-w-lg rounded-2xl bg-white p-8 shadow-2xl animate-in fade-in zoom-in">
                 <h2 className="mb-6 text-2xl font-bold text-slate-800">
                     {toEdit ? "Edit Task" : "Create Task"}
