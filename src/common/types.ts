@@ -1,4 +1,4 @@
-import type { Status } from "./Enums"
+import type { Status } from "./enums"
 
 export interface Values {
     title: string

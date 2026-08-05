@@ -1,8 +1,8 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
-import { Status } from "../types/Enums";
+import { Status } from "../common/enums";
 import { useTasks } from "../context/TaskContext";
-import type { Task } from "../types/Interfaces";
+import type { Task } from "../common/types";
 
 const TaskForm = ({
     setIsModalOpen,

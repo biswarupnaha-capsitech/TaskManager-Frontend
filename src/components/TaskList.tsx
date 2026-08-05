@@ -1,5 +1,5 @@
 import { useTasks } from "../context/TaskContext";
-import type { Task } from "../types/Interfaces";
+import type { Task } from "../common/types";
 import { Trash2, PencilLine } from 'lucide-react';
 
 const statusColor = {

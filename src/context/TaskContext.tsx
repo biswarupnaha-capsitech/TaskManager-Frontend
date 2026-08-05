@@ -6,10 +6,11 @@ import {
     type ReactNode,
 } from "react"
 
-import type { Task } from "../types/Interfaces"
+import type { Task } from "../common/types"
 
 interface TaskContextType {
-    tasks: Task[]
+    tasks: Task[],
+    fetchTasks: (tasks: Task[]) => void
     addTask: (values: Omit<Task, "id">) => void
     updateTask: (id: string, updates: Partial<Task>) => void
     deleteTask: (id: string) => void
@@ -29,6 +30,18 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks))
     }, [tasks])
+
+    function fetchTasks(tasks: Task[]) {
+        setTasks(prev => {
+            const map = new Map(prev.map(task => [task.id, task]));
+
+            tasks.forEach(task => {
+                map.set(task.id, task);
+            });
+
+            return Array.from(map.values());
+        });
+    }
 
     function addTask(values: Omit<Task, "id">) {
         const newTask: Task = {
@@ -57,6 +70,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         <TaskContext.Provider
             value={{
                 tasks,
+                fetchTasks,
                 addTask,
                 updateTask,
                 deleteTask,
