@@ -4,12 +4,16 @@ import { Status } from "../common/enums";
 import { useTasks } from "../context/TaskContext";
 import type { Task } from "../common/types";
 import { useToast } from "../context/ToastContext";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, Input, Label, Textarea } from "@fluentui/react-components";
+import { BanIcon } from "lucide-react";
 
 const TaskForm = ({
+    isModalOpen,
     setIsModalOpen,
     toEdit,
     task,
 }: {
+    isModalOpen: boolean
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     toEdit?: boolean;
     task?: Task | null;
@@ -19,12 +23,11 @@ const TaskForm = ({
     const { notify } = useToast();
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="w-full max-w-lg rounded-2xl bg-white p-8 shadow-2xl animate-in fade-in zoom-in">
-                <h2 className="mb-6 text-2xl font-bold text-slate-800">
-                    {toEdit ? "Edit Task" : "Create Task"}
-                </h2>
-
+        <Dialog modalType="non-modal" open={isModalOpen}>
+            <DialogSurface
+                aria-describedby={undefined}
+                className="w-full max-w-[95vw] rounded-2xl p-0"
+            >
                 <Formik
                     enableReinitialize
                     initialValues={{
@@ -37,80 +40,119 @@ const TaskForm = ({
                         if (toEdit && task) {
                             editTask(task.id, {
                                 ...values,
-                                status: Number(values.status)
-                            }).then(data => notify(data.msg, data.status ? "success" : "error"));
+                                status: Number(values.status),
+                            }).then((data) =>
+                                notify(data.msg, data.status ? "success" : "error")
+                            );
                         } else {
-                            addTask(values).then(data => notify(data.msg, data.status ? "success" : "error"));
+                            addTask(values).then((data) =>
+                                notify(data.msg, data.status ? "success" : "error")
+                            );
                         }
 
                         setIsModalOpen(false);
                     }}
                 >
-                    <Form className="space-y-5">
-                        <div>
-                            <label className="mb-2 block font-medium text-slate-700">
-                                Title
-                            </label>
-
-                            <Field
-                                name="title"
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:outline-none"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="mb-2 block font-medium text-slate-700">
-                                Description
-                            </label>
-
-                            <Field
-                                as="textarea"
-                                rows={4}
-                                name="description"
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:outline-none"
-                            />
-                        </div>
-
-                        {toEdit && <div>
-                            <label className="mb-2 block font-medium text-slate-700">
-                                Status
-                            </label>
-
-                            {<Field
-                                as="select"
-                                name="status"
-                                className="w-full rounded-xl border border-gray-300 px-4 py-3"
-                            >
-                                <option value={Status.Pending}>Pending</option>
-                                <option value={Status.InProgress}>
-                                    In Progress
-                                </option>
-                                <option value={Status.Completed}>
-                                    Completed
-                                </option>
-                            </Field>}
-                        </div>}
-
-                        <div className="flex justify-end gap-3">
-                            <button
-                                type="button"
-                                onClick={() => setIsModalOpen(false)}
-                                className="rounded-xl border px-5 py-2"
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                type="submit"
-                                className="rounded-xl bg-indigo-600 px-6 py-2 text-white shadow-md transition hover:bg-indigo-700"
-                            >
+                    <Form>
+                        <DialogBody className="p-6">
+                            <DialogTitle className="text-2xl font-semibold" action={
+                                <Button
+                                    appearance="subtle"
+                                    icon={<BanIcon />}
+                                    onClick={() => setIsModalOpen(false)}
+                                />
+                            }>
                                 {toEdit ? "Update Task" : "Create Task"}
-                            </button>
-                        </div>
+                            </DialogTitle>
+
+                            <DialogContent className="mt-6 flex flex-col gap-5">
+                                {/* Title */}
+                                <div className="flex flex-col gap-2">
+                                    <Label required htmlFor="title">
+                                        Title
+                                    </Label>
+
+                                    <Field name="title">
+                                        {({ field }: any) => (
+                                            <Input
+                                                {...field}
+                                                id="title"
+                                                size="large"
+                                                appearance="outline"
+                                                placeholder="Enter task title"
+                                                className="w-full"
+                                            />
+                                        )}
+                                    </Field>
+                                </div>
+
+                                {/* Description */}
+                                <div className="flex flex-col gap-2">
+                                    <Label htmlFor="description">
+                                        Description
+                                    </Label>
+
+                                    <Field name="description">
+                                        {({ field }: any) => (
+                                            <Textarea
+                                                {...field}
+                                                id="description"
+                                                resize="vertical"
+                                                rows={5}
+                                                placeholder="Describe your task..."
+                                                className="w-full"
+                                            />
+                                        )}
+                                    </Field>
+                                </div>
+
+                                {/* Status */}
+                                {toEdit && (
+                                    <div className="flex flex-col gap-2">
+                                        <Label htmlFor="status">
+                                            Status
+                                        </Label>
+
+                                        <Field name="status">
+                                            {({ field }: any) => (
+                                                <select
+                                                    {...field}
+                                                    id="status"
+                                                    className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500"
+                                                >
+                                                    <option value={Status.Pending}>Pending</option>
+                                                    <option value={Status.InProgress}>
+                                                        In Progress
+                                                    </option>
+                                                    <option value={Status.Completed}>
+                                                        Completed
+                                                    </option>
+                                                </select>
+                                            )}
+                                        </Field>
+                                    </div>
+                                )}
+                            </DialogContent>
+
+                            <DialogActions className="mt-8 flex justify-end gap-3">
+                                <Button appearance="primary" type="submit">
+                                    {toEdit ? "Update Task" : "Create Task"}
+                                </Button>
+
+                                <Button
+                                    appearance="secondary"
+                                    type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                >
+                                    Cancel
+                                </Button>
+
+                            </DialogActions>
+                        </DialogBody>
                     </Form>
                 </Formik>
-            </div>
-        </div>
+            </DialogSurface>
+        </Dialog>
     );
 };
 

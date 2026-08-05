@@ -1,46 +1,20 @@
 import {
     createContext,
     useContext,
-    useEffect,
     useState,
     type ReactNode,
 } from "react"
 
-import type { Task } from "../common/types"
+import type { Task, TaskContextType, TaskResponseType } from "../common/types"
 import { createTask, updateTask, deleteTask, getTasks } from "../api/taskService"
-
-interface TaskContextType {
-    tasks: Task[],
-    fetchTasks: () => Promise<TaskResponseType>
-    addTask: (values: Omit<Task, "id">) => Promise<TaskResponseType>
-    editTask: (id: string, updates: Partial<Task>) => Promise<TaskResponseType>
-    removeTask: (id: string) => Promise<TaskResponseType>
-}
-
-type TaskResponseType = {
-    msg: string
-    status: boolean
-}
 
 const TaskContext = createContext<TaskContextType | null>(null)
 
 export function TaskProvider({ children }: { children: ReactNode }) {
-    const [tasks, setTasks] = useState<Task[]>(() => {
-        const stored = localStorage.getItem("tasks")
-
-        if (!stored) return []
-
-        return JSON.parse(stored)
-    })
-
-    useEffect(() => {
-        localStorage.setItem("tasks", JSON.stringify(tasks))
-    }, [tasks])
+    const [tasks, setTasks] = useState<Task[]>([]);
 
 
 
-
-    //#region CRUD operations
     async function fetchTasks() {
         const data = await getTasks();
         const tasks: Task[] = data?.result;
@@ -80,7 +54,6 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         setTasks(prev => prev.filter(task => task.id !== id));
         return { msg: data?.message, status: data?.status };
     }
-    //#endregion
 
 
 

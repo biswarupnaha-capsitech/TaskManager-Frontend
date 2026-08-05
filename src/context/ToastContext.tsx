@@ -7,10 +7,7 @@ import {
     type ToastIntent,
 } from "@fluentui/react-components";
 import { createContext, useContext, type ReactNode } from "react";
-
-interface ToastContextType {
-    notify: (msg: string, intent: ToastIntent) => void
-}
+import type { ToastContextType } from "../common/types";
 
 const ToastContext = createContext<ToastContextType | null>(null)
 
