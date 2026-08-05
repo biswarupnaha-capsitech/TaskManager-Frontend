@@ -2,19 +2,15 @@ import { useEffect, useState } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import type { Task } from "./common/types";
-import { getTasks } from "./api/taskService";
 import { useTasks } from "./context/TaskContext";
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTodo, setEditingTodo] = useState<Task | null>(null);
-  const { tasks, fetchTasks } = useTasks();
+  const { fetchTasks } = useTasks();
 
   useEffect(() => {
-    getTasks().then(data => {
-      console.log(data)
-      fetchTasks(data?.result);
-    });
+    fetchTasks().then(msg => console.log(msg));
 
     return () => {
       console.log("Component unmounted");

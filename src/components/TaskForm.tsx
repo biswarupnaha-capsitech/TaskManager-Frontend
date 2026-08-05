@@ -14,7 +14,7 @@ const TaskForm = ({
     task?: Task | null;
 }) => {
 
-    const { addTask, updateTask } = useTasks();
+    const { addTask, editTask } = useTasks();
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -33,7 +33,7 @@ const TaskForm = ({
                     }}
                     onSubmit={(values) => {
                         if (toEdit && task) {
-                            updateTask(task.id, values);
+                            editTask(task.id, values);
                         } else {
                             addTask(values);
                         }

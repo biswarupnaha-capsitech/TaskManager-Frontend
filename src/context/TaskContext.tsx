@@ -7,13 +7,14 @@ import {
 } from "react"
 
 import type { Task } from "../common/types"
+import { createTask, updateTask, deleteTask, getTasks } from "../api/taskService"
 
 interface TaskContextType {
     tasks: Task[],
-    fetchTasks: (tasks: Task[]) => void
-    addTask: (values: Omit<Task, "id">) => void
-    updateTask: (id: string, updates: Partial<Task>) => void
-    deleteTask: (id: string) => void
+    fetchTasks: () => Promise<string>
+    addTask: (values: Omit<Task, "id">) => Promise<string>
+    editTask: (id: string, updates: Partial<Task>) => Promise<string>
+    removeTask: (id: string) => Promise<string>
 }
 
 const TaskContext = createContext<TaskContextType | null>(null)
@@ -31,7 +32,13 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("tasks", JSON.stringify(tasks))
     }, [tasks])
 
-    function fetchTasks(tasks: Task[]) {
+
+
+
+    //#region CRUD operations
+    async function fetchTasks() {
+        const data = await getTasks();
+        const tasks: Task[] = data?.result;
         setTasks(prev => {
             const map = new Map(prev.map(task => [task.id, task]));
 
@@ -41,30 +48,36 @@ export function TaskProvider({ children }: { children: ReactNode }) {
 
             return Array.from(map.values());
         });
+        return data?.message;
     }
 
-    function addTask(values: Omit<Task, "id">) {
-        const newTask: Task = {
-            id: crypto.randomUUID(),
-            ...values
-        }
-
+    async function addTask(values: Omit<Task, "id">): Promise<string> {
+        const data = await createTask(values);
+        const newTask = data?.result;
         setTasks(prev => [...prev, newTask])
+        return data?.message;
     }
 
-    function updateTask(id: string, updates: Partial<Task>) {
+    async function editTask(id: string, updates: Partial<Task>): Promise<string> {
+        const data = await updateTask(id, updates)
         setTasks(prev =>
             prev.map(task =>
                 task.id === id
                     ? { ...task, ...updates }
                     : task
             )
-        )
+        );
+        return data?.message;
     }
 
-    function deleteTask(id: string) {
-        setTasks(prev => prev.filter(task => task.id !== id))
+    async function removeTask(id: string): Promise<string> {
+        const data = await deleteTask(id);
+        setTasks(prev => prev.filter(task => task.id !== id));
+        return data?.message;
     }
+    //#endregion
+
+
 
     return (
         <TaskContext.Provider
@@ -72,8 +85,8 @@ export function TaskProvider({ children }: { children: ReactNode }) {
                 tasks,
                 fetchTasks,
                 addTask,
-                updateTask,
-                deleteTask,
+                editTask,
+                removeTask,
             }}
         >
             {children}

@@ -18,4 +18,7 @@ export const updateTask = async (id: string, updates: Partial<Task>) => {
     return res.data;
 }
 
-// export const d
+export const deleteTask = async (id: string) => {
+    const res = await api.delete(`${baseUrl}/DeleteTask/${id}`);
+    return res.data;
+}
