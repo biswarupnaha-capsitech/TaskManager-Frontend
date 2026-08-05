@@ -28,14 +28,17 @@ const TaskForm = ({
                     initialValues={{
                         title: task?.title ?? "",
                         description: task?.description ?? "",
-                        status: task?.status ?? Status.PENDING,
+                        status: task?.status ?? Status.Pending,
                         isDeleted: task?.isDeleted ?? false,
                     }}
                     onSubmit={(values) => {
                         if (toEdit && task) {
-                            editTask(task.id, values);
+                            editTask(task.id, {
+                                ...values,
+                                status: Number(values.status)
+                            }).then(msg => console.log(msg));
                         } else {
-                            addTask(values);
+                            addTask(values).then(msg => console.log(msg));
                         }
 
                         setIsModalOpen(false);
@@ -76,11 +79,11 @@ const TaskForm = ({
                                 name="status"
                                 className="w-full rounded-xl border border-gray-300 px-4 py-3"
                             >
-                                <option value={Status.PENDING}>Pending</option>
-                                <option value={Status.IN_PROGRESS}>
+                                <option value={Status.Pending}>Pending</option>
+                                <option value={Status.InProgress}>
                                     In Progress
                                 </option>
-                                <option value={Status.COMPLETED}>
+                                <option value={Status.Completed}>
                                     Completed
                                 </option>
                             </Field>}

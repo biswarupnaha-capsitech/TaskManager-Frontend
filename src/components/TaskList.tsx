@@ -20,7 +20,7 @@ type Props = {
 
 const TaskList = ({ onEdit }: Props) => {
 
-    const { tasks, deleteTask } = useTasks();
+    const { tasks, removeTask } = useTasks();
 
     if (tasks.length === 0) {
         return (
@@ -37,7 +37,7 @@ const TaskList = ({ onEdit }: Props) => {
     }
 
     function handleDelete(id: string) {
-        deleteTask(id);
+        removeTask(id).then(msg => console.log(msg));
     }
 
     function handleEdit(id: string) {
@@ -53,7 +53,7 @@ const TaskList = ({ onEdit }: Props) => {
             {tasks.map((task) => (
                 <div
                     key={task.id}
-                    className="rounded-2xl bg-white p-6 shadow-md md:w-4xl lg:w-5xl"
+                    className="rounded-2xl bg-white p-6 shadow-md"
                 >
                     <div className="relative flex items-center justify-center">
                         <h2 className="text-xl text-center font-semibold text-slate-800 break-all mt-10">
