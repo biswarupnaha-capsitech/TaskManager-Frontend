@@ -11,10 +11,15 @@ import { createTask, updateTask, deleteTask, getTasks } from "../api/taskService
 
 interface TaskContextType {
     tasks: Task[],
-    fetchTasks: () => Promise<string>
-    addTask: (values: Omit<Task, "id">) => Promise<string>
-    editTask: (id: string, updates: Partial<Task>) => Promise<string>
-    removeTask: (id: string) => Promise<string>
+    fetchTasks: () => Promise<TaskResponseType>
+    addTask: (values: Omit<Task, "id">) => Promise<TaskResponseType>
+    editTask: (id: string, updates: Partial<Task>) => Promise<TaskResponseType>
+    removeTask: (id: string) => Promise<TaskResponseType>
+}
+
+type TaskResponseType = {
+    msg: string
+    status: boolean
 }
 
 const TaskContext = createContext<TaskContextType | null>(null)
@@ -48,17 +53,17 @@ export function TaskProvider({ children }: { children: ReactNode }) {
 
             return Array.from(map.values());
         });
-        return data?.message;
+        return { msg: data?.message, status: data?.status };
     }
 
-    async function addTask(values: Omit<Task, "id">): Promise<string> {
+    async function addTask(values: Omit<Task, "id">): Promise<TaskResponseType> {
         const data = await createTask(values);
         const newTask = data?.result;
         setTasks(prev => [...prev, newTask])
-        return data?.message;
+        return { msg: data?.message, status: data?.status };
     }
 
-    async function editTask(id: string, updates: Partial<Task>): Promise<string> {
+    async function editTask(id: string, updates: Partial<Task>): Promise<TaskResponseType> {
         const data = await updateTask(id, updates)
         setTasks(prev =>
             prev.map(task =>
@@ -67,13 +72,13 @@ export function TaskProvider({ children }: { children: ReactNode }) {
                     : task
             )
         );
-        return data?.message;
+        return { msg: data?.message, status: data?.status };
     }
 
-    async function removeTask(id: string): Promise<string> {
+    async function removeTask(id: string): Promise<TaskResponseType> {
         const data = await deleteTask(id);
         setTasks(prev => prev.filter(task => task.id !== id));
-        return data?.message;
+        return { msg: data?.message, status: data?.status };
     }
     //#endregion
 

@@ -3,14 +3,16 @@ import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import type { Task } from "./common/types";
 import { useTasks } from "./context/TaskContext";
+import { useToast } from "./context/ToastContext";
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTodo, setEditingTodo] = useState<Task | null>(null);
   const { fetchTasks } = useTasks();
+  const { notify } = useToast();
 
   useEffect(() => {
-    fetchTasks().then(msg => console.log(msg));
+    fetchTasks().then(data => notify(data.msg, data.status ? "success" : "error"));
 
     return () => {
       console.log("Component unmounted");

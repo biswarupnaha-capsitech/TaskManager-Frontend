@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import { Status } from "../common/enums";
 import { useTasks } from "../context/TaskContext";
 import type { Task } from "../common/types";
+import { useToast } from "../context/ToastContext";
 
 const TaskForm = ({
     setIsModalOpen,
@@ -15,6 +16,7 @@ const TaskForm = ({
 }) => {
 
     const { addTask, editTask } = useTasks();
+    const { notify } = useToast();
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -36,9 +38,9 @@ const TaskForm = ({
                             editTask(task.id, {
                                 ...values,
                                 status: Number(values.status)
-                            }).then(msg => console.log(msg));
+                            }).then(data => notify(data.msg, data.status ? "success" : "error"));
                         } else {
-                            addTask(values).then(msg => console.log(msg));
+                            addTask(values).then(data => notify(data.msg, data.status ? "success" : "error"));
                         }
 
                         setIsModalOpen(false);
