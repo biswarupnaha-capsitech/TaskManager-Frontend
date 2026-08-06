@@ -17,7 +17,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
 
     async function fetchTasks() {
         const data = await getTasks();
-        const tasks: Task[] = data?.result;
+        const tasks: Task[] = data?.result?.results;
         setTasks(prev => {
             const map = new Map(prev.map(task => [task.id, task]));
 

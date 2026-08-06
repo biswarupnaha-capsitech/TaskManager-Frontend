@@ -32,3 +32,24 @@ export type TaskResponseType = {
 export interface ToastContextType {
     notify: (msg: string, intent: ToastIntent) => void
 }
+
+
+export interface RegisterUserType {
+    email: string,
+    name: {
+        first: string,
+        last: string
+    },
+    phoneNumber: string
+}
+
+export interface LoginUserType {
+    userName: string,
+    password: string
+}
+
+export interface AuthContextType {
+    token: string | null;
+    login(token: string): void;
+    logout(): void;
+}

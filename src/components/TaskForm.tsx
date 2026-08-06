@@ -81,6 +81,7 @@ const TaskForm = ({
                                                 appearance="outline"
                                                 placeholder="Enter task title"
                                                 className="w-full"
+                                                required
                                             />
                                         )}
                                     </Field>
