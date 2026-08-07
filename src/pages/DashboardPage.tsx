@@ -14,7 +14,8 @@ const DashboardPage = () => {
     const { notify } = useToast();
 
     useEffect(() => {
-        fetchTasks().then(data => notify(data.msg, data.status ? "success" : "error"));
+        fetchTasks().then(data =>
+            !data.status && notify(data.msg, "error"));
 
         return () => {
             console.log("Component unmounted");
