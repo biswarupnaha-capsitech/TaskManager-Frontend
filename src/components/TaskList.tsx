@@ -1,8 +1,8 @@
-import { useTasks } from "../context/TaskContext";
 import type { Task } from "../common/types";
 import { Trash2, PencilLine } from 'lucide-react';
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger } from "@fluentui/react-components";
 import { useToast } from "../context/ToastContext";
+import { useTasks } from "../hooks/useTasks";
 
 const statusColor = {
     0: "bg-amber-100 text-amber-700",
@@ -21,7 +21,6 @@ type Props = {
 };
 
 const TaskList = ({ onEdit }: Props) => {
-
     const { tasks, removeTask } = useTasks();
     const { notify } = useToast();
 

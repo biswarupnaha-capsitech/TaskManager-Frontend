@@ -23,8 +23,9 @@ import { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 
 import { authService } from "../api/authService";
-import { useAuth } from "../context/AuthProvider";
 import { useToast } from "../context/ToastContext";
+import { login } from "../app/features/authSlice";
+import { useAppDispatch } from "../app/store";
 
 const useStyles = makeStyles({
     root: {
@@ -95,9 +96,8 @@ export default function LoginPage() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [serverError, setServerError] = useState("");
-
-    const { login } = useAuth();
     const { notify } = useToast();
+    const dispatch = useAppDispatch();
 
     return (
         <div className={styles.root}>
@@ -134,7 +134,7 @@ export default function LoginPage() {
                                     "tm-accessToken",
                                     data.result.token,
                                 );
-                                login(data.result.token);
+                                dispatch(login(data?.result?.token));
                                 notify(data.message, data.status ? "success" : "error");
                                 navigate("/");
                             })

@@ -1,19 +1,22 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { TaskProvider } from './context/TaskContext.tsx'
 import { ToastProvider } from './context/ToastContext.tsx'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { AuthProvider } from './context/AuthProvider.tsx'
+import { Provider } from "react-redux"
+import { store } from "./app/store.ts"
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <FluentProvider theme={webLightTheme}>
-    <TaskProvider>
+    <QueryClientProvider client={queryClient}>
       <ToastProvider>
-        <AuthProvider>
+        <Provider store={store}>
           <App />
-        </AuthProvider>
+        </Provider>
       </ToastProvider>
-    </TaskProvider>,
+    </QueryClientProvider>
   </FluentProvider>
 )

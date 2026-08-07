@@ -1,21 +1,22 @@
 import { useEffect, useState, } from 'react'
-import { useTasks } from '../context/TaskContext';
+import { useTasks } from '../hooks/useTasks';
 import type { Task } from '../common/types';
 import { useToast } from '../context/ToastContext';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
-import { useAuth } from '../context/AuthProvider';
+import { logout } from '../app/features/authSlice';
+import { useAppDispatch } from '../app/store';
 
 const DashboardPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTodo, setEditingTodo] = useState<Task | null>(null);
     const { fetchTasks } = useTasks();
-    const { logout } = useAuth();
     const { notify } = useToast();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         fetchTasks().then(data =>
-            !data.status && notify(data.msg, "error"));
+            !data?.status && notify(data?.msg, "error"));
 
         return () => {
             console.log("Component unmounted");
@@ -41,7 +42,8 @@ const DashboardPage = () => {
                         </button>
                         <button
                             onClick={() => {
-                                logout();
+                                // logout();
+                                dispatch(logout());
                                 notify("Logged out successfully", "success");
                             }}
                             className="rounded-4xl bg-red-400 px-3 py-2 md:px-7 md:py-4 font-medium text-white shadow-md transition hover:shadow-lg hover:bg-[#e7e5e5] hover:text-red-400 text-xs md:text-lg hover:cursor-pointer"
