@@ -160,7 +160,7 @@ export default function RegisterPage() {
                                 validationMessage={touched.name?.first ? errors.name?.first : ""}
                             >
                                 <Input
-                                    name="first"
+                                    name="name.first"
                                     placeholder="Enter your first name"
                                     value={values.name.first}
                                     onBlur={handleBlur}
@@ -172,7 +172,7 @@ export default function RegisterPage() {
                                 validationMessage={touched.name?.last ? errors.name?.last : ""}
                             >
                                 <Input
-                                    name="last"
+                                    name="name.last"
                                     placeholder="Enter your last name"
                                     value={values.name.last}
                                     onBlur={handleBlur}
@@ -184,7 +184,7 @@ export default function RegisterPage() {
                                 validationMessage={touched.email ? errors.email : ""}
                             >
                                 <Input
-                                    name="userName"
+                                    name="email"
                                     placeholder="john@example.com"
                                     value={values.email}
                                     onBlur={handleBlur}
