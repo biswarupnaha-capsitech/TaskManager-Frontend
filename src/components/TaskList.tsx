@@ -1,6 +1,6 @@
 import type { Task } from "../common/types";
 import { Trash2, PencilLine } from 'lucide-react';
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Spinner } from "@fluentui/react-components";
 import { useToast } from "../context/ToastContext";
 import { useTasks } from "../hooks/useTasks";
 
@@ -21,9 +21,12 @@ type Props = {
 };
 
 const TaskList = ({ onEdit }: Props) => {
-    const { tasks, removeTask } = useTasks();
+    const { tasks, isLoading, removeTask } = useTasks();
     const { notify } = useToast();
 
+    if (isLoading) {
+        return (<Spinner />)
+    }
     if (tasks.length === 0) {
         return (
             <div className="mt-16 rounded-2xl bg-white p-10 text-center shadow-md">
