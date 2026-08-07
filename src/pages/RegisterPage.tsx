@@ -1,37 +1,23 @@
 import {
     Button,
-    Checkbox,
+    Card,
+    Field,
+    Input,
     MessageBar,
     MessageBarBody,
+    Spinner,
     Text,
     makeStyles,
+    tokens,
 } from "@fluentui/react-components";
 
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
-
 import { authService } from "../api/authService";
-
-const useStyles = makeStyles({
-    row: {
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "12px",
-    },
-
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "18px",
-    },
-
-    footer: {
-        marginTop: "24px",
-        textAlign: "center",
-    },
-});
+import { useToast } from "../context/ToastContext";
+import { ClipboardTask24Regular } from "@fluentui/react-icons";
 
 const schema = Yup.object({
     name: Yup.object({
@@ -47,180 +33,214 @@ const schema = Yup.object({
         .min(10, "Minimum 10 characters")
         .max(10, "Maximum 10 characters")
         .required("Phone numberis required"),
-    acceptTerms: Yup.bool()
-        .oneOf([true], "Accept the terms"),
+});
+
+
+const useStyles = makeStyles({
+    root: {
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#f5f7fb",
+        padding: "32px",
+    },
+
+    card: {
+        width: "430px",
+        borderRadius: "20px",
+        padding: "36px",
+        boxShadow: tokens.shadow16,
+    },
+
+    icon: {
+        display: "flex",
+        justifyContent: "center",
+        marginBottom: "16px",
+    },
+
+    title: {
+        textAlign: "center",
+        marginBottom: "4px",
+    },
+
+    subtitle: {
+        display: "block",
+        textAlign: "center",
+        color: tokens.colorNeutralForeground3,
+        marginBottom: "32px",
+    },
+
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "18px",
+    },
+
+    row: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+
+    loginButton: {
+        marginTop: "8px",
+        height: "44px",
+        fontWeight: 600,
+    },
+
+    footer: {
+        marginTop: "24px",
+        textAlign: "center",
+    },
 });
 
 export default function RegisterPage() {
     const styles = useStyles();
     const navigate = useNavigate();
     const [serverError, setServerError] = useState("");
+    const { notify } = useToast();
 
     return (
-        <div
-            title="Create account"
-        >
-            {serverError && (
-                <MessageBar intent="error">
-                    <MessageBarBody>
-                        {serverError}
-                    </MessageBarBody>
-                </MessageBar>
-            )}
-            <Formik
-                initialValues={{
-                    name: {
-                        first: "",
-                        last: "",
-                    },
-                    email: "",
-                    phoneNumber: "",
-                    acceptTerms: false
-                }}
-                validationSchema={schema}
-                onSubmit={async (values, helpers) => {
-                    setServerError("");
-                    try {
-                        await authService.register({
-                            name: {
-                                first: values.name.first,
-                                last: values.name.last,
-                            },
-                            email: values.email,
-                            phoneNumber: values.phoneNumber
-                        });
-                        navigate("/login");
-                    }
-                    catch (err: any) {
-                        setServerError(
-                            err.response?.data?.message ??
-                            "Registration failed."
-                        );
-                    }
-                    helpers.setSubmitting(false);
-                }}
-            >
-                {({
-                    values,
-                    errors,
-                    touched,
-                    handleBlur,
-                    handleChange,
-                    handleSubmit,
-                    isSubmitting,
-                    setFieldValue
-                }) => (
-                    <form
-                        className={styles.form}
-                        onSubmit={handleSubmit}
-                    >
-                        <div className={styles.row}>
+        <div className={styles.root}>
+            <Card className={styles.card}>
+                <div className={styles.icon}>
+                    <ClipboardTask24Regular primaryFill="#6D4AFF" fontSize={48} />
+                </div>
+
+                <Text className={styles.title} size={700} weight="semibold">
+                    Get started
+                </Text>
+
+                <Text className={styles.subtitle}>
+                    Register to continue to your account
+                </Text>
+
+                {serverError && (
+                    <MessageBar intent="error">
+                        <MessageBarBody>{serverError}</MessageBarBody>
+                    </MessageBar>
+                )}
+
+                <Formik
+                    initialValues={{
+                        name: {
+                            first: "",
+                            last: ""
+                        },
+                        email: '',
+                        phoneNumber: "",
+                    }}
+                    validationSchema={schema}
+                    onSubmit={async (values, helpers) => {
+                        setServerError("");
+                        try {
+                            await authService.register(values).then(data => {
+                                notify("Successfully registered! Your default password is: welcome", data.status ? "success" : "error");
+                                if (data.status) navigate("/login", { replace: true });
+                            })
+                        } catch (err: any) {
+                            setServerError(err.response?.data?.message ?? "Login failed.");
+                        }
+                        helpers.setSubmitting(false);
+                    }}
+                >
+                    {({
+                        values,
+                        errors,
+                        touched,
+                        handleSubmit,
+                        handleBlur,
+                        handleChange,
+                        isSubmitting,
+                    }) => (
+                        <form onSubmit={handleSubmit} className={styles.form}>
                             <Field
                                 label="First Name"
-                                name="firstName"
-                                value={values.name.first}
-                                placeholder="John"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                error={
-                                    touched.name?.first
-                                        ? errors.name?.first
-                                        : ""
-                                }
-                            />
+                                validationMessage={touched.name?.first ? errors.name?.first : ""}
+                            >
+                                <Input
+                                    name="first"
+                                    placeholder="Enter your first name"
+                                    value={values.name.first}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                />
+                            </Field>
                             <Field
                                 label="Last Name"
-                                name="lastName"
-                                value={values.name.last}
-                                placeholder="Doe"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                error={
-                                    touched.name?.last
-                                        ? errors.name?.last
-                                        : ""
-                                }
-                            />
-                        </div>
-                        <Field
-                            label="Email"
-                            name="email"
-                            value={values.email}
-                            placeholder="john@example.com"
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            error={
-                                touched.email
-                                    ? errors.email
-                                    : ""
-                            }
-                        />
+                                validationMessage={touched.name?.last ? errors.name?.last : ""}
+                            >
+                                <Input
+                                    name="last"
+                                    placeholder="Enter your last name"
+                                    value={values.name.last}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                />
+                            </Field>
+                            <Field
+                                label="Email"
+                                validationMessage={touched.email ? errors.email : ""}
+                            >
+                                <Input
+                                    name="userName"
+                                    placeholder="john@example.com"
+                                    value={values.email}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                />
+                            </Field>
 
-                        <Field
-                            label="Phone Number"
-                            name="phoneNumber"
-                            value={values.phoneNumber}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            error={
-                                touched.phoneNumber
-                                    ? errors.phoneNumber
-                                    : ""
-                            }
-                        />
+                            <Field
+                                label="Phone Number"
+                                validationMessage={touched.phoneNumber ? errors.phoneNumber : ""}
+                            >
+                                <Input
+                                    name="phoneNumber"
+                                    value={values.phoneNumber}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                />
+                            </Field>
 
-                        <Checkbox
-
-                            label="I agree to the Terms & Conditions"
-
-                            checked={values.acceptTerms}
-
-                            onChange={(_, data) =>
-                                setFieldValue(
-                                    "acceptTerms",
-                                    data.checked
-                                )
-
-                            }
-
-                        />
-                        {touched.acceptTerms &&
-                            errors.acceptTerms && (
-                                <Text
-                                    size={200}
-                                    style={{
-                                        color: "#d13438"
-                                    }}
+                            <div className={styles.row}>
+                                <RouterLink
+                                    to="/forgot-password"
                                 >
-                                    {errors.acceptTerms}
-                                </Text>
+                                    Forgot Password?
+                                </RouterLink>
+                            </div>
 
-                            )}
-                        <Button
-                            disabled={isSubmitting}
+                            <Button
+                                appearance="primary"
+                                type="submit"
+                                size="large"
+                                disabled={isSubmitting}
+                                className={styles.loginButton}
+                            >
+                                {isSubmitting ? <Spinner size="tiny" /> : "Register"}
+                            </Button>
+                        </form>
+                    )}
+                </Formik>
+
+                <div className={styles.footer}>
+                    <Text>
+                        Already have an account?{" "}
+                        <RouterLink
+                            to="/login"
+                            style={{
+                                color: "#6D4AFF",
+                                textDecoration: "none",
+                                fontWeight: 500,
+                            }}
                         >
-                            Create Account
-                        </Button>
-                    </form>
-                )}
-            </Formik>
-
-            <div className={styles.footer}>
-                <Text>
-                    Already have an account?{" "}
-                    <RouterLink
-                        to="/login"
-                        style={{
-                            color: "#6D4AFF",
-                            textDecoration: "none",
-                            fontWeight: 600
-                        }}
-                    >
-                        Login
-                    </RouterLink>
-                </Text>
-            </div>
+                            Login
+                        </RouterLink>
+                    </Text>
+                </div>
+            </Card>
         </div>
     );
-
 }

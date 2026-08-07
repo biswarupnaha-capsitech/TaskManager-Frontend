@@ -9,7 +9,7 @@ export const authService = {
     },
 
     async register(data: RegisterUserType) {
-        const res = await api.post("/Auth/Register", data);
+        const res = await api.post("/Auth/SaveUser", data);
         return res.data;
     },
 
