@@ -1,35 +1,23 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import ProtectedRoute from "./ProtectedRoute";
-import RegisterPage from "./pages/RegisterPage";
+import RouteContainer from "./routes/RouteContainer";
+import { FluentProvider, webLightTheme } from "@fluentui/react-components";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastProvider } from "./context/ToastContext";
+import { store } from "./app/store";
+import { Provider } from "react-redux";
 
 function App() {
+  const queryClient = new QueryClient();
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/login"
-          element={<LoginPage />}
-        />
-
-        <Route
-          path="/register"
-          element={<RegisterPage />}
-        />
-
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-
-      </Routes>
-    </BrowserRouter>
+    <FluentProvider theme={webLightTheme}>
+      <QueryClientProvider client={queryClient}>
+        <ToastProvider>
+          <Provider store={store}>
+            <RouteContainer />
+          </Provider>
+        </ToastProvider>
+      </QueryClientProvider>
+    </FluentProvider>
   );
 }
 

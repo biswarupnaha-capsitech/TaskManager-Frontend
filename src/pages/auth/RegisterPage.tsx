@@ -15,8 +15,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
-import { authService } from "../api/authService";
-import { useToast } from "../context/ToastContext";
+import { authService } from "../../api/services/authService";
+import { useToast } from "../../hooks/useToast";
 import { ClipboardTask24Regular } from "@fluentui/react-icons";
 
 const schema = Yup.object({

@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAppSelector } from "./app/store";
+import { useAppSelector } from "../app/store";
 
 interface Props {
     children: React.ReactElement;

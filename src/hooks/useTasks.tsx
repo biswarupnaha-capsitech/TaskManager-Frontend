@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { createTask, updateTask, deleteTask, getTasks } from "../api/taskService"
+import { createTask, updateTask, deleteTask, getTasks } from "../api/services/taskService"
 import type { Task } from "../common/types"
 import { useAppDispatch, useAppSelector } from "../app/store"
 import { addTaskLocal, removeTaskLocal, setTasks, updateTaskLocal } from "../app/features/taskSlice"

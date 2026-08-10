@@ -6,10 +6,10 @@ import {
     ToastTitle,
     type ToastIntent,
 } from "@fluentui/react-components";
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, type ReactNode } from "react";
 import type { ToastContextType } from "../common/types";
 
-const ToastContext = createContext<ToastContextType | null>(null)
+export const ToastContext = createContext<ToastContextType | null>(null)
 
 export function ToastProvider({ children }: { children: ReactNode }) {
     const toasterId = useId("toaster");
@@ -36,14 +36,4 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             {children}
         </ToastContext.Provider>
     )
-}
-
-export function useToast() {
-    const context = useContext(ToastContext)
-
-    if (!context) {
-        throw new Error("useToasts must be used inside TostProvider")
-    }
-
-    return context
 }

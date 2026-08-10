@@ -22,10 +22,10 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 
-import { authService } from "../api/authService";
-import { useToast } from "../context/ToastContext";
-import { login } from "../app/features/authSlice";
-import { useAppDispatch } from "../app/store";
+import { authService } from "../../api/services/authService";
+import { login } from "../../app/features/authSlice";
+import { useAppDispatch } from "../../app/store";
+import { useToast } from "../../hooks/useToast";
 
 const useStyles = makeStyles({
     root: {

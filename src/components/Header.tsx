@@ -1,0 +1,47 @@
+import type React from 'react';
+import { logout } from '../app/features/authSlice';
+import { useAppDispatch } from '../app/store';
+import { useToast } from '../hooks/useToast';
+import type { SetStateAction } from 'react';
+import type { Task } from '../common/types';
+
+const Header = ({ setIsModalOpen, setEditingTodo }: {
+    setIsModalOpen: React.Dispatch<SetStateAction<boolean>>,
+    setEditingTodo: React.Dispatch<SetStateAction<Task | null>>,
+}) => {
+    const dispatch = useAppDispatch();
+    const { notify } = useToast();
+
+    return (
+        <header className="bg-[#115EA3] w-full fixed shadow-lg">
+            <div className="mx-auto max-w-5xl px-6 py-8 flex justify-between items-center">
+                <h1 className="text-2xl md:text-4xl font-bold text-white">
+                    Task Manager
+                </h1>
+                <div className='flex md:gap-x-12 gap-x-5'>
+                    <button
+                        onClick={() => {
+                            setEditingTodo(null);
+                            setIsModalOpen(true);
+                        }}
+                        className="rounded-4xl bg-white px-3 py-2 md:px-6 md:py-3 font-medium text-[#115EA3] shadow-md transition hover:shadow-lg hover:bg-[#e5e6e7]  text-xs md:text-lg hover:cursor-pointer"
+                    >
+                        + New Task
+                    </button>
+                    <button
+                        onClick={() => {
+                            // logout();
+                            dispatch(logout());
+                            notify("Logged out successfully", "success");
+                        }}
+                        className="rounded-4xl bg-red-400 px-3 py-2 md:px-7 md:py-4 font-medium text-white shadow-md transition hover:shadow-lg hover:bg-[#e7e5e5] hover:text-red-400 text-xs md:text-lg hover:cursor-pointer"
+                    >
+                        Log out
+                    </button>
+                </div>
+            </div>
+        </header>
+    )
+}
+
+export default Header

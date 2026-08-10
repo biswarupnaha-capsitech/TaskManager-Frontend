@@ -1,5 +1,5 @@
-import type { LoginUserType, RegisterUserType } from "../common/types";
-import api from "./axios";
+import type { LoginUserType, RegisterUserType } from "../../common/types";
+import api from "../axios";
 
 export const authService = {
 
