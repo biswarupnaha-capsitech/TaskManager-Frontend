@@ -1,7 +1,7 @@
 import type { Task } from "../common/types";
 import { Trash2, PencilLine } from 'lucide-react';
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Spinner } from "@fluentui/react-components";
-import { useToast } from "../context/ToastContext";
+import { useToast } from "../hooks/useToast";
 import { useTasks } from "../hooks/useTasks";
 
 const statusColor = {

@@ -1,5 +1,5 @@
-import type { Task } from "../common/types";
-import api from "./axios";
+import type { Task } from "../../common/types";
+import api from "../axios";
 
 const baseUrl = "/Task";
 

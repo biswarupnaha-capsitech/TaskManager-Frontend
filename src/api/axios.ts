@@ -41,7 +41,7 @@ api.interceptors.response.use(
                 return api(originalRequest);
             } catch (refreshError) {
                 // Refresh endpoint failed
-                localStorage.removeItem("tm-accessToken");
+                localStorage.removeItem("tm-access");
                 window.location.href = "/login";
                 return Promise.reject(refreshError);
             }
