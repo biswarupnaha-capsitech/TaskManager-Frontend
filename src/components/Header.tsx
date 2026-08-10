@@ -1,11 +1,13 @@
 import type React from 'react';
 import { logout } from '../app/features/authSlice';
+import { resetTasks } from '../app/features/taskSlice';
 import { useAppDispatch } from '../app/store';
 import { useToast } from '../hooks/useToast';
 import type { SetStateAction } from 'react';
 import type { Task } from '../common/types';
 import { authService } from '../api/services/authService';
 import { useNavigate } from 'react-router-dom';
+import { useTasks } from '../hooks/useTasks';
 
 const Header = ({ setIsModalOpen, setEditingTodo }: {
     setIsModalOpen: React.Dispatch<SetStateAction<boolean>>,
@@ -14,6 +16,7 @@ const Header = ({ setIsModalOpen, setEditingTodo }: {
     const dispatch = useAppDispatch();
     const { notify } = useToast();
     const navigate = useNavigate();
+    const { tasksQueryClient } = useTasks();
 
     return (
         <header className="bg-[#115EA3] w-full fixed shadow-lg">
@@ -35,6 +38,8 @@ const Header = ({ setIsModalOpen, setEditingTodo }: {
                         onClick={async () => {
                             await authService.logout().then(data => {
                                 dispatch(logout());
+                                dispatch(resetTasks());
+                                tasksQueryClient.clear();
                                 notify(data?.message, data.status ? "success" : "error");
                                 navigate("/login");
                             }).catch(error => {

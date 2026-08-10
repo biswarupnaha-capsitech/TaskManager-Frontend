@@ -29,8 +29,11 @@ const tasksSlice = createSlice({
         removeTaskLocal(state, action: PayloadAction<string>) {
             state.tasks = state.tasks.filter(task => task.id !== action.payload)
         },
+        resetTasks(state) {
+            state = initialState
+        }
     },
 })
 
-export const { setTasks, addTaskLocal, updateTaskLocal, removeTaskLocal } = tasksSlice.actions
+export const { setTasks, addTaskLocal, updateTaskLocal, removeTaskLocal, resetTasks } = tasksSlice.actions
 export default tasksSlice.reducer

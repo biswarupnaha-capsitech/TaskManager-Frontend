@@ -50,6 +50,7 @@ export function useTasks() {
     return {
         tasks,
         isLoading: query.isLoading,
+        tasksQueryClient: queryClient,
         fetchTasks: async () => {
             const result = await query.refetch()
             return result.data

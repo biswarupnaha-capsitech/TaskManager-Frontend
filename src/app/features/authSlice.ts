@@ -25,7 +25,6 @@ const authSlice = createSlice({
 
         logout: (state) => {
             state.token = null;
-
             localStorage.removeItem(
                 "tm-access"
             );
