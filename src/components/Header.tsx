@@ -35,14 +35,12 @@ const Header = ({ setIsModalOpen, setEditingTodo }: {
                         onClick={async () => {
                             await authService.logout().then(data => {
                                 dispatch(logout());
-                                notify(data.message, data.status ? "success" : "error");
+                                notify(data?.message, data.status ? "success" : "error");
                                 navigate("/login");
                             }).catch(error => {
                                 console.log(error?.message);
                                 notify("Something went wrong", "error");
                             });
-                            dispatch(logout());
-                            notify("Logged out successfully", "success");
                         }}
                         className="rounded-4xl bg-red-400 px-3 py-2 md:px-7 md:py-4 font-medium text-white shadow-md transition hover:shadow-lg hover:bg-[#e7e5e5] hover:text-red-400 text-xs md:text-lg hover:cursor-pointer"
                     >

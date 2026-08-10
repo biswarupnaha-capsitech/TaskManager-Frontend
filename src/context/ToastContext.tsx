@@ -31,7 +31,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 position="top-end"
                 pauseOnHover
                 pauseOnWindowBlur
-                timeout={1000}
+                timeout={2000}
             />
             {children}
         </ToastContext.Provider>
