@@ -30,7 +30,7 @@ const tasksSlice = createSlice({
             state.tasks = state.tasks.filter(task => task.id !== action.payload)
         },
         resetTasks(state) {
-            state = initialState
+            state.tasks = []
         }
     },
 })
