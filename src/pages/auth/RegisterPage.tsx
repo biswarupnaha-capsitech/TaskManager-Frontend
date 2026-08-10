@@ -17,7 +17,7 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
 import { authService } from "../../api/services/authService";
 import { useToast } from "../../hooks/useToast";
-import { ClipboardTask24Regular } from "@fluentui/react-icons";
+import { ClipboardTask24Regular, Eye24Regular, EyeOff24Regular } from "@fluentui/react-icons";
 
 const schema = Yup.object({
     name: Yup.object({
@@ -30,9 +30,14 @@ const schema = Yup.object({
         .email("Invalid email")
         .required("Email is required"),
     phoneNumber: Yup.string()
-        .min(10, "Minimum 10 characters")
-        .max(10, "Maximum 10 characters")
+        .matches(/^[0-9]{10}$/, 'Phone number is not valid')
         .required("Phone numberis required"),
+    password: Yup.string()
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            'Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character')
+        .required("Password is required"),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'Passwords must match')
 });
 
 
@@ -100,6 +105,8 @@ export default function RegisterPage() {
     const navigate = useNavigate();
     const [serverError, setServerError] = useState("");
     const { notify } = useToast();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     return (
         <div className={styles.root}>
@@ -130,13 +137,20 @@ export default function RegisterPage() {
                         },
                         email: '',
                         phoneNumber: "",
+                        password: "",
+                        confirmPassword: ''
                     }}
                     validationSchema={schema}
                     onSubmit={async (values, helpers) => {
                         setServerError("");
                         try {
-                            await authService.register(values).then(data => {
-                                notify("Successfully registered! Your default password is: welcome", data.status ? "success" : "error");
+                            await authService.register({
+                                name: values.name,
+                                email: values.email,
+                                phoneNumber: values.phoneNumber,
+                                passwordHash: values.password
+                            }).then(data => {
+                                notify(data?.message, data.status ? "success" : "error");
                                 if (data.status) navigate("/login", { replace: true });
                             })
                         } catch (err: any) {
@@ -201,6 +215,65 @@ export default function RegisterPage() {
                                     value={values.phoneNumber}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
+                                />
+                            </Field>
+
+                            <Field
+                                label="Password"
+                                validationMessage={touched.password ? errors.password : ""}
+                            >
+                                <Input
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    value={values.password}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    contentAfter={
+                                        showPassword ? (
+                                            <EyeOff24Regular
+                                                onClick={() => setShowPassword(false)}
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                            />
+                                        ) : (
+                                            <Eye24Regular
+                                                onClick={() => setShowPassword(true)}
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                            />
+                                        )
+                                    }
+                                />
+                            </Field>
+                            <Field
+                                label="Confirm Password"
+                                validationMessage={touched.confirmPassword ? errors.confirmPassword : ""}
+                            >
+                                <Input
+                                    name="confirmPassword"
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    value={values.confirmPassword}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    contentAfter={
+                                        showConfirmPassword ? (
+                                            <EyeOff24Regular
+                                                onClick={() => setShowConfirmPassword(false)}
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                            />
+                                        ) : (
+                                            <Eye24Regular
+                                                onClick={() => setShowConfirmPassword(true)}
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}
+                                            />
+                                        )
+                                    }
                                 />
                             </Field>
 

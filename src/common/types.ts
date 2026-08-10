@@ -40,7 +40,8 @@ export interface RegisterUserType {
         first: string,
         last: string
     },
-    phoneNumber: string
+    phoneNumber: string,
+    passwordHash: string
 }
 
 export interface LoginUserType {

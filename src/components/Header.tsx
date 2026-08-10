@@ -8,6 +8,7 @@ import type { Task } from '../common/types';
 import { authService } from '../api/services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useTasks } from '../hooks/useTasks';
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger } from '@fluentui/react-components';
 
 const Header = ({ setIsModalOpen, setEditingTodo }: {
     setIsModalOpen: React.Dispatch<SetStateAction<boolean>>,
@@ -34,23 +35,40 @@ const Header = ({ setIsModalOpen, setEditingTodo }: {
                     >
                         + New Task
                     </button>
-                    <button
-                        onClick={async () => {
-                            await authService.logout().then(data => {
-                                dispatch(logout());
-                                dispatch(resetTasks());
-                                tasksQueryClient.clear();
-                                notify(data?.message, data.status ? "success" : "error");
-                                navigate("/login");
-                            }).catch(error => {
-                                console.log(error?.message);
-                                notify("Something went wrong", "error");
-                            });
-                        }}
-                        className="rounded-4xl bg-red-400 px-3 py-2 md:px-7 md:py-4 font-medium text-white shadow-md transition hover:shadow-lg hover:bg-[#e7e5e5] hover:text-red-400 text-xs md:text-lg hover:cursor-pointer"
-                    >
-                        Log out
-                    </button>
+                    <Dialog>
+                        <DialogTrigger disableButtonEnhancement>
+                            <button
+                                className="rounded-4xl bg-red-400 px-3 py-2 md:px-7 md:py-4 font-medium text-white shadow-md transition hover:shadow-lg hover:bg-[#e7e5e5] hover:text-red-400 text-xs md:text-lg hover:cursor-pointer"
+                            >
+                                Log out
+                            </button>
+                        </DialogTrigger>
+                        <DialogSurface>
+                            <DialogBody>
+                                <DialogTitle>Log out confirmation</DialogTitle>
+                                <DialogContent>
+                                    Are you sure you want to log out?
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button appearance="primary" onClick={async () => {
+                                        await authService.logout().then(data => {
+                                            dispatch(logout());
+                                            dispatch(resetTasks());
+                                            tasksQueryClient.clear();
+                                            notify(data?.message, data.status ? "success" : "error");
+                                            navigate("/login");
+                                        }).catch(error => {
+                                            console.log(error?.message);
+                                            notify("Something went wrong", "error");
+                                        });
+                                    }}>Confirm</Button>
+                                    <DialogTrigger disableButtonEnhancement>
+                                        <Button appearance="secondary">Cancel</Button>
+                                    </DialogTrigger>
+                                </DialogActions>
+                            </DialogBody>
+                        </DialogSurface>
+                    </Dialog>
                 </div>
             </div>
         </header>
