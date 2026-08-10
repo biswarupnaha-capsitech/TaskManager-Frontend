@@ -28,13 +28,13 @@ api.interceptors.response.use(
 
             try {
                 const data = await authService.refresh();
-                if (!data.status) {
+                if (!data?.status) {
                     localStorage.removeItem("tm-access");
                     window.location.href = "/login";
-                    return Promise.reject(new Error(data.message));
+                    return Promise.reject(new Error(data?.message));
                 }
 
-                const token = data.result.token;
+                const token = data?.result?.token;
                 localStorage.setItem("tm-access", token);
                 originalRequest.headers.Authorization = `Bearer ${token}`;
 

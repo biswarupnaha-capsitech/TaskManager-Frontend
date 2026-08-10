@@ -130,14 +130,10 @@ export default function LoginPage() {
                         setServerError("");
                         try {
                             await authService.login(values).then(data => {
-                                localStorage.setItem(
-                                    "tm-accessToken",
-                                    data.result.token,
-                                );
                                 dispatch(login(data?.result?.token));
                                 notify(data.message, data.status ? "success" : "error");
                                 navigate("/");
-                            })
+                            });
                         } catch (err: any) {
                             setServerError(err.response?.data?.message ?? "Login failed.");
                         }

@@ -4,6 +4,8 @@ import { useAppDispatch } from '../app/store';
 import { useToast } from '../hooks/useToast';
 import type { SetStateAction } from 'react';
 import type { Task } from '../common/types';
+import { authService } from '../api/services/authService';
+import { useNavigate } from 'react-router-dom';
 
 const Header = ({ setIsModalOpen, setEditingTodo }: {
     setIsModalOpen: React.Dispatch<SetStateAction<boolean>>,
@@ -11,6 +13,7 @@ const Header = ({ setIsModalOpen, setEditingTodo }: {
 }) => {
     const dispatch = useAppDispatch();
     const { notify } = useToast();
+    const navigate = useNavigate();
 
     return (
         <header className="bg-[#115EA3] w-full fixed shadow-lg">
@@ -29,8 +32,15 @@ const Header = ({ setIsModalOpen, setEditingTodo }: {
                         + New Task
                     </button>
                     <button
-                        onClick={() => {
-                            // logout();
+                        onClick={async () => {
+                            await authService.logout().then(data => {
+                                dispatch(logout());
+                                notify(data.message, data.status ? "success" : "error");
+                                navigate("/login");
+                            }).catch(error => {
+                                console.log(error?.message);
+                                notify("Something went wrong", "error");
+                            });
                             dispatch(logout());
                             notify("Logged out successfully", "success");
                         }}
