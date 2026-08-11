@@ -38,6 +38,7 @@ const schema = Yup.object({
         .required("Password is required"),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password')], 'Passwords must match')
+        .required("Confirm password is required")
 });
 
 

@@ -1,12 +1,6 @@
 import type { ToastIntent } from "@fluentui/react-components"
 import type { Status } from "./enums"
 
-export interface Values {
-    title: string
-    description: string
-    status: Status
-    isDeleted: boolean
-}
 
 export interface Task {
     id: string
@@ -53,4 +47,29 @@ export interface AuthContextType {
     token: string | null;
     login(token: string): void;
     logout(): void;
+}
+
+export interface Project {
+    id: string
+    title: string
+    description: string
+    isCompleted: boolean
+    isDeleted: boolean
+}
+
+export interface ProjectWithTasks extends Project {
+    Tasks: Task[]
+}
+
+export interface ProjectContextType {
+    projects: ProjectWithTasks[],
+    fetchProjects: () => Promise<ProjectResponseType>
+    addProject: (values: Omit<Project, "id">) => Promise<ProjectResponseType>
+    editProject: (id: string, updates: Partial<Project>) => Promise<ProjectResponseType>
+    removeProject: (id: string) => Promise<ProjectResponseType>
+}
+
+export type ProjectResponseType = {
+    msg: string
+    status: boolean
 }
