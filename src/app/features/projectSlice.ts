@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Project, ProjectWithTasks } from "../../common/types";
 
 interface ProjectsState {
-    projects: Project[]
+    projects: ProjectWithTasks[]
 }
 
 const initialState: ProjectsState = {
@@ -13,12 +13,12 @@ const projectsSlice = createSlice({
     name: "projects",
     initialState,
     reducers: {
-        setProjects(state, action: PayloadAction<Project[]>) {
+        setProjects(state, action: PayloadAction<ProjectWithTasks[]>) {
             const map = new Map(state.projects.map(project => [project.id, project]))
             action.payload.forEach(project => map.set(project.id, project))
             state.projects = Array.from(map.values())
         },
-        addProjectLocal(state, action: PayloadAction<Project>) {
+        addProjectLocal(state, action: PayloadAction<ProjectWithTasks>) {
             state.projects.push(action.payload)
         },
         updateProjectLocal(state, action: PayloadAction<{ id: string; updates: Partial<Project> }>) {

@@ -1,7 +1,7 @@
 import type React from 'react';
 import { logout } from '../app/features/authSlice';
 import { resetTasks } from '../app/features/taskSlice';
-import { useAppDispatch } from '../app/store';
+import { useAppDispatch, useAppSelector } from '../app/store';
 import { useToast } from '../hooks/useToast';
 import type { SetStateAction } from 'react';
 import type { Project, Task } from '../common/types';
@@ -9,7 +9,7 @@ import { authService } from '../api/services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useTasks } from '../hooks/useTasks';
 import { Avatar, Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Hamburger } from '@fluentui/react-components';
-import { Home20Regular } from '@fluentui/react-icons';
+import { Home20Regular, SignOut20Regular } from '@fluentui/react-icons';
 
 const Header = ({ setIsModalOpen, setEditingTodo, setDrawerOpen, name, initials }: {
     setIsModalOpen: React.Dispatch<SetStateAction<boolean>>,
@@ -22,6 +22,7 @@ const Header = ({ setIsModalOpen, setEditingTodo, setDrawerOpen, name, initials 
     const { notify } = useToast();
     const navigate = useNavigate();
     const { tasksQueryClient } = useTasks();
+    const user = useAppSelector(s => s.auth.user);
 
     return (
         <header className=" bg-[#115EA3] w-full fixed shadow-lg z-10">
@@ -38,7 +39,7 @@ const Header = ({ setIsModalOpen, setEditingTodo, setDrawerOpen, name, initials 
                     Task Manager
                 </h1>
                 <div className='flex md:gap-x-12 gap-x-5'>
-                    <button
+                    {/* <button
                         onClick={() => {
                             setEditingTodo(null);
                             setIsModalOpen(true);
@@ -46,10 +47,48 @@ const Header = ({ setIsModalOpen, setEditingTodo, setDrawerOpen, name, initials 
                         className="rounded-4xl bg-white px-3 py-2 md:px-6 md:py-3 font-medium text-[#115EA3] shadow-md transition hover:shadow-lg hover:bg-[#e5e6e7]  text-xs md:text-lg hover:cursor-pointer"
                     >
                         + New Task
-                    </button>
-                    <div className='flex justify-center items-center'>
+                    </button> */}
+                    {/* <h5 className="text-lg font-bold text-white">
+                        Welcome, {user?.name}
+                    </h5> */}
+                    {/* <div className='flex justify-center items-center'>
                         <Avatar name={name} initials={initials} />
-                    </div>
+                    </div> */}
+                    <Dialog>
+                        <DialogTrigger disableButtonEnhancement>
+                            <Button
+                                appearance="secondary"
+                                icon={<SignOut20Regular />}
+                            >
+                                Log out
+                            </Button>
+                        </DialogTrigger>
+                        <DialogSurface>
+                            <DialogBody>
+                                <DialogTitle>Log out confirmation</DialogTitle>
+                                <DialogContent>
+                                    Are you sure you want to log out?
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button appearance="primary" onClick={async () => {
+                                        await authService.logout().then(data => {
+                                            dispatch(logout());
+                                            dispatch(resetTasks());
+                                            tasksQueryClient.clear();
+                                            notify(data?.message, data.status ? "success" : "error");
+                                            navigate("/login");
+                                        }).catch(error => {
+                                            console.log(error?.message);
+                                            notify("Something went wrong", "error");
+                                        });
+                                    }}>Confirm</Button>
+                                    <DialogTrigger disableButtonEnhancement>
+                                        <Button appearance="secondary">Cancel</Button>
+                                    </DialogTrigger>
+                                </DialogActions>
+                            </DialogBody>
+                        </DialogSurface>
+                    </Dialog>
                 </div>
             </div>
         </header>

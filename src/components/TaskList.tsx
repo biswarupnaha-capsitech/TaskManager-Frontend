@@ -19,10 +19,14 @@ const statusText = {
 
 type Props = {
     onEdit: (task: Task) => void;
+    tasks?: Task[];
+    isLoading?: boolean;
 };
 
-const TaskList = ({ onEdit }: Props) => {
-    const { tasks, isLoading, removeTask } = useTasks();
+const TaskList = ({ onEdit, tasks: tasksProp, isLoading: isLoadingProp }: Props) => {
+    const { tasks: allTasks, isLoading: hookLoading, removeTask } = useTasks();
+    const tasks = tasksProp ?? allTasks;
+    const isLoading = isLoadingProp ?? hookLoading;
     const { notify } = useToast();
 
     if (isLoading) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, data } from "react-router-dom";
 import {
     Avatar,
     Button,
@@ -26,9 +26,7 @@ import {
     Add20Regular,
     Dismiss20Regular,
     Home20Regular,
-    Line20Filled,
     Person20Regular,
-    SignOut20Regular,
 } from "@fluentui/react-icons";
 import { useAppDispatch, useAppSelector } from "../app/store";
 import { logout } from "../app/features/authSlice";
@@ -39,13 +37,9 @@ import { useProjects } from "../hooks/useProjects";
 import type { Project, Task } from "../common/types";
 import { authService } from "../api/services/authService";
 import Header from "../components/Header";
-import { resetTasks } from "../app/features/taskSlice";
-import { useTasks } from "../hooks/useTasks";
-import DashboardPage from "../pages/dashboard/DashboardPage";
-import TaskForm from "../components/TaskForm";
-import TaskList from "../components/TaskList";
 import { PencilLine, Trash2 } from "lucide-react";
-import { deleteProject } from "../api/services/projectService";
+import { useTasks } from "../hooks/useTasks";
+import TaskForm from "../components/TaskForm";
 
 const useStyles = makeStyles({
     shell: { minHeight: "100dvh", backgroundColor: tokens.colorNeutralBackground3 },
@@ -88,7 +82,7 @@ const useStyles = makeStyles({
         margin: "0 auto",
         position: "relative",
         top: "12dvh",
-        padding: "200px",
+        // padding: "200px",
         "@media (max-width: 760px)": { padding: "24px 16px 40px" },
     },
     mobileTitle: { flex: 1, marginLeft: "8px" },
@@ -156,7 +150,9 @@ export function AppLayout() {
                 onNewProject={() => setIsProjectModalOpen(true)}
                 onNavigate={navigate}
                 onLogout={async () => {
-                    await authService.logout();
+                    await authService.logout().then(data =>
+                        notify(data?.message, data.status ? "success" : "error")
+                    );
                     dispatch(logout());
                     navigate("/login");
                 }}
@@ -201,16 +197,16 @@ export function AppLayout() {
                                 ))}
                             </Skeleton>) :
                             projects.map((p) => (
-                                <div className="flex w-60 justify-between">
-                                    <Button
+                                <div className="flex w-65 justify-between">
+                                    <div
                                         key={p.id}
-                                        appearance="subtle"
                                         onClick={() => { navigate(`/projects/${p.id}`); setDrawerOpen(false); }}
+                                        className={`w-full font-medium rounded-2xl flex justify-center items-center hover:bg-gray-50 hover:cursor-pointer ${p.isCompleted && "bg-green-200 hover:bg-green-200 pointer-events-none cursor-not-allowed"}`}
                                     >
                                         {p.title}
-                                    </Button>
-                                    {/* <PencilLine
-                                className="text-yellow-500 hover:text-yellow-700" onClick={() => handleEdit(p.id)} /> */}
+                                    </div>
+                                    <PencilLine
+                                        className="text-yellow-500 hover:text-yellow-700" onClick={() => handleEdit(p.id)} />
                                     <Dialog>
                                         <DialogTrigger disableButtonEnhancement>
                                             <Trash2
@@ -250,41 +246,7 @@ export function AppLayout() {
                         >
                             New project
                         </Button>
-                        <Dialog>
-                            <DialogTrigger disableButtonEnhancement>
-                                <Button
-                                    appearance="subtle"
-                                    icon={<SignOut20Regular />}
-                                >
-                                    Log out
-                                </Button>
-                            </DialogTrigger>
-                            <DialogSurface>
-                                <DialogBody>
-                                    <DialogTitle>Log out confirmation</DialogTitle>
-                                    <DialogContent>
-                                        Are you sure you want to log out?
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button appearance="primary" onClick={async () => {
-                                            await authService.logout().then(data => {
-                                                dispatch(logout());
-                                                dispatch(resetTasks());
-                                                tasksQueryClient.clear();
-                                                notify(data?.message, data.status ? "success" : "error");
-                                                navigate("/login");
-                                            }).catch(error => {
-                                                console.log(error?.message);
-                                                notify("Something went wrong", "error");
-                                            });
-                                        }}>Confirm</Button>
-                                        <DialogTrigger disableButtonEnhancement>
-                                            <Button appearance="secondary">Cancel</Button>
-                                        </DialogTrigger>
-                                    </DialogActions>
-                                </DialogBody>
-                            </DialogSurface>
-                        </Dialog>
+
                         <div className={styles.profile}>
                             <Avatar
                                 name={`${user?.name ?? ""}`}
@@ -311,12 +273,6 @@ export function AppLayout() {
                 />
                 <main className={styles.main}>
                     <Outlet />
-                    {/* <main className="mx-auto top-40 relative max-w-5xl p-6 px-8"> */}
-                    <TaskList onEdit={(task) => {
-                        setEditingTodo(task);
-                        setIsModalOpen(true);
-                    }} />
-                    {/* </main> */}
                 </main>
             </div>
             {

@@ -21,6 +21,7 @@ import {
     Home20Regular,
     Person20Regular,
     SignOut20Regular,
+    TaskListLtr24Filled,
 } from "@fluentui/react-icons";
 import type { Project, User } from "../common/types";
 import { useNavigate } from "react-router-dom";
@@ -78,7 +79,6 @@ export function Sidebar({
     setIsProjectModalOpen,
     onNewProject,
     onNavigate,
-    onLogout,
     user,
 }: {
     projects: Project[];
@@ -123,6 +123,14 @@ export function Sidebar({
                 >
                     Dashboard
                 </Button>
+                <Button
+                    appearance="subtle"
+                    icon={<TaskListLtr24Filled />}
+                    className={styles.projectButton}
+                    onClick={() => onNavigate("/tasks")}
+                >
+                    All tasks
+                </Button>
 
                 <div className={styles.section}>Projects</div>
                 <Divider />
@@ -140,8 +148,8 @@ export function Sidebar({
                         projects.map((p) => (
                             <div key={p.id} className="flex justify-between">
                                 <div
-                                    onClick={() => navigate(`/projects/${p.id}`)}
-                                    className="w-full font-medium flex justify-center items-center hover:bg-gray-50 hover:cursor-pointer"
+                                    onClick={() => !p.isCompleted && navigate(`/projects/${p.id}`)}
+                                    className={`w-full font-medium rounded-2xl flex justify-center items-center hover:bg-gray-50 hover:cursor-pointer ${p.isCompleted && "bg-green-200 hover:bg-green-200 pointer-events-none cursor-not-allowed"}`}
                                 >
                                     {p.title}
                                 </div>
@@ -186,22 +194,22 @@ export function Sidebar({
 
             <div className={styles.bottom}>
                 <Divider />
-                <Button
+                {/* <Button
                     appearance="subtle"
                     icon={<Person20Regular />}
                     className={styles.projectButton}
                     onClick={() => onNavigate("/profile")}
                 >
                     Profile
-                </Button>
-                <Button
+                </Button> */}
+                {/* <Button
                     appearance="subtle"
                     icon={<SignOut20Regular />}
                     className={styles.projectButton}
                     onClick={onLogout}
                 >
-                    Sign out
-                </Button>
+                    Log out
+                </Button> */}
 
                 <div className={styles.profile}>
                     <Avatar name={`${user?.name ?? ""}`} size={32} />
