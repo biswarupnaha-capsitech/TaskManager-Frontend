@@ -1,9 +1,10 @@
 import axios from "axios";
 import { authService } from "./services/authService";
+import { store } from "../app/store";
+import { login, logout } from "../app/features/authSlice";
 
 const api = axios.create({
     baseURL: `${import.meta.env.VITE_BACKEND_URL}`,
-    // timeout: 5000,
     headers: {
         "Content-Type": "application/json"
     }
@@ -16,8 +17,6 @@ api.interceptors.request.use(config => {
     return config;
 }, error => Promise.reject(error));
 
-
-
 api.interceptors.response.use(
     response => response,
     async error => {
@@ -29,19 +28,16 @@ api.interceptors.response.use(
             try {
                 const data = await authService.refresh();
                 if (!data?.status) {
-                    localStorage.removeItem("tm-access");
+                    store.dispatch(logout());
                     window.location.href = "/login";
                     return Promise.reject(new Error(data?.message));
                 }
-
-                const token = data?.result?.token;
-                localStorage.setItem("tm-access", token);
-                originalRequest.headers.Authorization = `Bearer ${token}`;
+                store.dispatch(login(data?.result));
+                originalRequest.headers.Authorization = `Bearer ${data?.result?.token}`;
 
                 return api(originalRequest);
             } catch (refreshError) {
-                // Refresh endpoint failed
-                localStorage.removeItem("tm-access");
+                store.dispatch(logout());
                 window.location.href = "/login";
                 return Promise.reject(refreshError);
             }

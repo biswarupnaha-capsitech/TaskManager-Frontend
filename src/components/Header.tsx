@@ -4,15 +4,19 @@ import { resetTasks } from '../app/features/taskSlice';
 import { useAppDispatch } from '../app/store';
 import { useToast } from '../hooks/useToast';
 import type { SetStateAction } from 'react';
-import type { Task } from '../common/types';
+import type { Project, Task } from '../common/types';
 import { authService } from '../api/services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useTasks } from '../hooks/useTasks';
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger } from '@fluentui/react-components';
+import { Avatar, Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Hamburger } from '@fluentui/react-components';
+import { Home20Regular } from '@fluentui/react-icons';
 
-const Header = ({ setIsModalOpen, setEditingTodo }: {
+const Header = ({ setIsModalOpen, setEditingTodo, setDrawerOpen, name, initials }: {
     setIsModalOpen: React.Dispatch<SetStateAction<boolean>>,
+    setDrawerOpen: React.Dispatch<SetStateAction<boolean>>,
     setEditingTodo: React.Dispatch<SetStateAction<Task | null>>,
+    name: string,
+    initials: string
 }) => {
     const dispatch = useAppDispatch();
     const { notify } = useToast();
@@ -20,9 +24,17 @@ const Header = ({ setIsModalOpen, setEditingTodo }: {
     const { tasksQueryClient } = useTasks();
 
     return (
-        <header className="bg-[#115EA3] w-full fixed shadow-lg">
-            <div className="mx-auto max-w-5xl px-6 py-8 flex justify-between items-center">
-                <h1 className="text-2xl md:text-4xl font-bold text-white">
+        <header className=" bg-[#115EA3] w-full fixed shadow-lg z-10">
+            <div className="md:w-[75dvw] lg:w-[85dvw] md:md-px-50 px-5 py-8 justify-between flex items-center">
+                <span className='md:hidden'>
+                    <Button
+                        appearance="primary"
+                        icon={<Hamburger />}
+                        onClick={() => setDrawerOpen(true)}
+                        aria-label="Open navigation"
+                    />
+                </span>
+                <h1 className="text-xl md:text-4xl font-bold text-white">
                     Task Manager
                 </h1>
                 <div className='flex md:gap-x-12 gap-x-5'>
@@ -35,40 +47,9 @@ const Header = ({ setIsModalOpen, setEditingTodo }: {
                     >
                         + New Task
                     </button>
-                    <Dialog>
-                        <DialogTrigger disableButtonEnhancement>
-                            <button
-                                className="rounded-4xl bg-red-400 px-3 py-2 md:px-7 md:py-4 font-medium text-white shadow-md transition hover:shadow-lg hover:bg-[#e7e5e5] hover:text-red-400 text-xs md:text-lg hover:cursor-pointer"
-                            >
-                                Log out
-                            </button>
-                        </DialogTrigger>
-                        <DialogSurface>
-                            <DialogBody>
-                                <DialogTitle>Log out confirmation</DialogTitle>
-                                <DialogContent>
-                                    Are you sure you want to log out?
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button appearance="primary" onClick={async () => {
-                                        await authService.logout().then(data => {
-                                            dispatch(logout());
-                                            dispatch(resetTasks());
-                                            tasksQueryClient.clear();
-                                            notify(data?.message, data.status ? "success" : "error");
-                                            navigate("/login");
-                                        }).catch(error => {
-                                            console.log(error?.message);
-                                            notify("Something went wrong", "error");
-                                        });
-                                    }}>Confirm</Button>
-                                    <DialogTrigger disableButtonEnhancement>
-                                        <Button appearance="secondary">Cancel</Button>
-                                    </DialogTrigger>
-                                </DialogActions>
-                            </DialogBody>
-                        </DialogSurface>
-                    </Dialog>
+                    <div className='flex justify-center items-center'>
+                        <Avatar name={name} initials={initials} />
+                    </div>
                 </div>
             </div>
         </header>

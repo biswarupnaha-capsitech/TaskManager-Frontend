@@ -130,7 +130,7 @@ export default function LoginPage() {
                         setServerError("");
                         try {
                             await authService.login(values).then(data => {
-                                dispatch(login(data?.result?.token));
+                                dispatch(login(data?.result));
                                 notify(data?.message, data.status ? "success" : "error");
                                 navigate("/");
                             });

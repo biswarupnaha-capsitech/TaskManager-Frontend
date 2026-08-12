@@ -17,6 +17,8 @@ export function useTasks() {
             dispatch(setTasks(fetched))
             return { msg: data?.message, status: data?.status }
         },
+        staleTime: 5 * 60 * 1000,
+        refetchOnMount: false,    
     })
 
     const addMutation = useMutation({

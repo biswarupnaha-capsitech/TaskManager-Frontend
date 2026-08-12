@@ -8,6 +8,8 @@ export interface Task {
     description: string
     status: Status
     isDeleted: boolean
+    projectId: string
+    dueDate: string
 }
 
 export interface TaskContextType {
@@ -49,6 +51,12 @@ export interface AuthContextType {
     logout(): void;
 }
 
+export type User = {
+    id: string;
+    name: string
+    email: string;
+};
+
 export interface Project {
     id: string
     title: string
@@ -57,8 +65,8 @@ export interface Project {
     isDeleted: boolean
 }
 
-export interface ProjectWithTasks extends Project {
-    Tasks: Task[]
+export type ProjectWithTasks = Project & {
+    tasks: Task[]
 }
 
 export interface ProjectContextType {

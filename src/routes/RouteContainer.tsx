@@ -2,7 +2,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom"
 import LoginPage from "../pages/auth/LoginPage"
 import RegisterPage from "../pages/auth/RegisterPage"
 import ProtectedRoute from "./ProtectedRoute"
-import DashboardPage from "../pages/dashboard/DashboardPage"
+import { AppLayout } from "../layout/AppLayout"
 
 const RouteContainer = () => {
     return (
@@ -22,7 +22,7 @@ const RouteContainer = () => {
                     path="/"
                     element={
                         <ProtectedRoute>
-                            <DashboardPage />
+                            <AppLayout />
                         </ProtectedRoute>
                     }
                 />

@@ -4,8 +4,16 @@ import { Status } from "../common/enums";
 import { useTasks } from "../hooks/useTasks";
 import type { Task } from "../common/types";
 import { useToast } from "../hooks/useToast";
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, Input, Label, Textarea } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, Input, Label, makeStyles, Textarea } from "@fluentui/react-components";
 import { BanIcon } from "lucide-react";
+import { useAppSelector } from "../app/store";
+import { DatePicker } from "@fluentui/react-datepicker-compat"
+
+const useStyles = makeStyles({
+    control: {
+        maxWidth: "300px",
+    },
+});
 
 const TaskForm = ({
     isModalOpen,
@@ -21,6 +29,8 @@ const TaskForm = ({
 
     const { addTask, editTask } = useTasks();
     const { notify } = useToast();
+    const projects = useAppSelector(s => s.projects.projects);
+    const styles = useStyles();
 
     return (
         <Dialog modalType="non-modal" open={isModalOpen}>
@@ -35,6 +45,8 @@ const TaskForm = ({
                         description: task?.description ?? "",
                         status: task?.status ?? Status.Pending,
                         isDeleted: task?.isDeleted ?? false,
+                        projectId: task?.projectId ?? "",
+                        dueDate: task?.dueDate ?? ""
                     }}
                     onSubmit={(values) => {
                         if (toEdit && task) {
@@ -49,7 +61,6 @@ const TaskForm = ({
                                 notify(data.msg, data.status ? "success" : "error")
                             );
                         }
-
                         setIsModalOpen(false);
                     }}
                 >
@@ -107,6 +118,50 @@ const TaskForm = ({
                                     </Field>
                                 </div>
 
+                                {/* Project */}
+                                <div className="flex flex-col gap-2">
+                                    <Label htmlFor="project">
+                                        Project
+                                    </Label>
+
+                                    <Field name="projectId">
+                                        {({ field }: any) => (
+                                            <select
+                                                {...field}
+                                                id="project"
+                                                className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500"
+                                            >
+                                                <option value="" hidden>select</option>
+                                                {projects.map(project =>
+                                                    <option value={project.id}>{project.title}</option>
+                                                )}
+                                            </select>
+                                        )}
+                                    </Field>
+                                </div>
+                                {/* Due */}
+                                <div className="flex flex-col gap-2">
+                                    <Label htmlFor="due">
+                                        Due date
+                                    </Label>
+
+                                    <Field name="dueDate">
+                                        {({ field, form }: any) => (
+                                            <DatePicker
+                                                id="due"
+                                                appearance="filled-lighter-shadow"
+                                                className={styles.control}
+                                                placeholder="Select a date..."
+                                                value={field.value ? new Date(field.value) : null}
+                                                onSelectDate={(date) => {
+                                                    form.setFieldValue("dueDate", date ? date.toISOString() : null);
+                                                }}
+                                                onBlur={() => form.setFieldTouched("dueDate", true)}
+                                            />
+                                        )}
+                                    </Field>
+                                </div>
+
                                 {/* Status */}
                                 {toEdit && (
                                     <div className="flex flex-col gap-2">
@@ -153,7 +208,7 @@ const TaskForm = ({
                     </Form>
                 </Formik>
             </DialogSurface>
-        </Dialog>
+        </Dialog >
     );
 };
 
