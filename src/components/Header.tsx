@@ -1,17 +1,17 @@
 import type React from 'react';
 import { logout } from '../app/features/authSlice';
 import { resetTasks } from '../app/features/taskSlice';
-import { useAppDispatch, useAppSelector } from '../app/store';
+import { useAppDispatch } from '../app/store';
 import { useToast } from '../hooks/useToast';
 import type { SetStateAction } from 'react';
-import type { Project, Task } from '../common/types';
+import type { Task } from '../common/types';
 import { authService } from '../api/services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useTasks } from '../hooks/useTasks';
-import { Avatar, Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Hamburger } from '@fluentui/react-components';
-import { Home20Regular, SignOut20Regular } from '@fluentui/react-icons';
+import {  Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Hamburger } from '@fluentui/react-components';
+import { SignOut20Regular } from '@fluentui/react-icons';
 
-const Header = ({ setIsModalOpen, setEditingTodo, setDrawerOpen, name, initials }: {
+const Header = ({ setDrawerOpen, }: {
     setIsModalOpen: React.Dispatch<SetStateAction<boolean>>,
     setDrawerOpen: React.Dispatch<SetStateAction<boolean>>,
     setEditingTodo: React.Dispatch<SetStateAction<Task | null>>,
@@ -22,7 +22,6 @@ const Header = ({ setIsModalOpen, setEditingTodo, setDrawerOpen, name, initials 
     const { notify } = useToast();
     const navigate = useNavigate();
     const { tasksQueryClient } = useTasks();
-    const user = useAppSelector(s => s.auth.user);
 
     return (
         <header className=" bg-[#115EA3] w-full fixed shadow-lg z-10">

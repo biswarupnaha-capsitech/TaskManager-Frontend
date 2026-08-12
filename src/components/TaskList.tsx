@@ -101,11 +101,11 @@ const TaskList = ({ onEdit, tasks: tasksProp, isLoading: isLoadingProp }: Props)
                         </Dialog>
                     </div>
 
-                    <h2 className="text-center text-xl font-semibold text-slate-800 break-words mt-2">
+                    <h2 className="text-center text-xl font-semibold text-slate-800 wrap-break-word mt-2">
                         {task.title}
                     </h2>
 
-                    <p className="mt-3 flex-1 text-slate-600 break-words">
+                    <p className="mt-3 flex-1 text-slate-600 wrap-break-word">
                         {task.description}
                     </p>
 

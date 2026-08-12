@@ -19,14 +19,11 @@ import {
 import {
     Add20Regular,
     Home20Regular,
-    Person20Regular,
-    SignOut20Regular,
     TaskListLtr24Filled,
 } from "@fluentui/react-icons";
 import type { Project, User } from "../common/types";
 import { useNavigate } from "react-router-dom";
 import { PencilLine, Trash2 } from "lucide-react";
-import { deleteProject } from "../api/services/projectService";
 import { useToast } from "../hooks/useToast";
 import { useProjects } from "../hooks/useProjects";
 

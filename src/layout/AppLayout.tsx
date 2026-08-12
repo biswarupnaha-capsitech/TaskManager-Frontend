@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate, useLocation, data } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
     Avatar,
     Button,
@@ -17,7 +17,6 @@ import {
     DrawerHeaderTitle,
     Skeleton,
     SkeletonItem,
-    Spinner,
     Text,
     makeStyles,
     tokens,
@@ -38,7 +37,6 @@ import type { Project, Task } from "../common/types";
 import { authService } from "../api/services/authService";
 import Header from "../components/Header";
 import { PencilLine, Trash2 } from "lucide-react";
-import { useTasks } from "../hooks/useTasks";
 import TaskForm from "../components/TaskForm";
 
 const useStyles = makeStyles({
@@ -99,13 +97,11 @@ export function AppLayout() {
     const styles = useStyles();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
     const user = useAppSelector((s) => s.auth.user);
     const { projects, isLoading } = useProjects();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const { notify } = useToast();
     const { fetchProjects, removeProject } = useProjects();
-    const { tasksQueryClient } = useTasks();
     const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
     const [editingProject, setEditingProject] = useState<Project | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,12 +116,6 @@ export function AppLayout() {
     const fName = user?.name.split("")[0] ?? "";
     const lName = user?.name.split("")[1] ?? "";
     const initials = `${fName.charAt(0)} ${lName.charAt(0)}`.toUpperCase();
-
-    const title = location.pathname.startsWith("/profile")
-        ? "Profile"
-        : location.pathname === "/projects"
-            ? "All Tasks"
-            : "Project";
 
     function handleDelete(id: string) {
         removeProject(id).then(data =>
