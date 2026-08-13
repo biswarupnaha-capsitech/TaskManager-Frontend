@@ -8,7 +8,7 @@ const TasksPage = () => {
     const [editingTask, setEditingTask] = useState<Task | null>(null);
 
     return (
-        <div className="flex flex-col gap-6 px-10 pt-10">
+        <div className="flex flex-col gap-6 px-10">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-semibold text-slate-800">Tasks</h1>
                 <button

@@ -88,12 +88,12 @@ const useStyles = makeStyles({
     },
     main: {
         height: "100dvh",
-        maxWidth: "100dvw",
-        margin: "0 auto",
+        maxWidth: "68dvw",
+        margin: "auto",
         position: "relative",
-        top: "12dvh",
+        top: "15dvh",
         // padding: "200px",
-        "@media (max-width: 760px)": { padding: "24px 16px 40px" },
+        "@media (max-width: 760px)": { padding: "24px 16px 40px", maxWidth: "100%" },
     },
     mobileTitle: { flex: 1, marginLeft: "8px" },
     profile: {
@@ -208,7 +208,8 @@ export function AppLayout() {
                                         <SkeletonItem shape="rectangle" style={{ width: "100%", height: "16px" }} />
                                     </div>
                                 ))}
-                            </Skeleton>) :
+                            </Skeleton>
+                        ) :
                             projects.map((p) => (
                                 <div className="flex w-65 gap-5">
                                     <div

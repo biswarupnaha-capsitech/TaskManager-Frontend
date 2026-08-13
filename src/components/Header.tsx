@@ -25,7 +25,7 @@ const Header = ({ setDrawerOpen, }: {
 
     return (
         <header className=" bg-[#115EA3] w-full fixed shadow-lg z-10">
-            <div className="md:w-[75dvw] lg:w-[85dvw] md:md-px-50 px-5 py-8 justify-between flex items-center">
+            <div className="md:w-[75dvw] lg:w-[85dvw] md:md-px-80 px-5 py-8 justify-between flex items-center">
                 <span className='md:hidden'>
                     <Hamburger
                         appearance="primary"
