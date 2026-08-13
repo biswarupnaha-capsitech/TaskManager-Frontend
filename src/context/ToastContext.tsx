@@ -28,7 +28,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         >
             <Toaster
                 toasterId={toasterId}
-                position="top-end"
+                position="bottom-end"
                 pauseOnHover
                 pauseOnWindowBlur
                 timeout={2000}
