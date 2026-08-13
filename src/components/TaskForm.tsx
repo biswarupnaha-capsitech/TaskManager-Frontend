@@ -120,7 +120,7 @@ const TaskForm = ({
 
                                 {/* Project */}
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor="project">
+                                    <Label required htmlFor="project">
                                         Project
                                     </Label>
 
@@ -129,11 +129,12 @@ const TaskForm = ({
                                             <select
                                                 {...field}
                                                 id="project"
+                                                required
                                                 className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500"
                                             >
                                                 <option value="" hidden>select</option>
                                                 {projects.map(project =>
-                                                    <option value={project.id}>{project.title}</option>
+                                                    <option key={project.id} value={project.id}>{project.title}</option>
                                                 )}
                                             </select>
                                         )}
@@ -141,7 +142,7 @@ const TaskForm = ({
                                 </div>
                                 {/* Due */}
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor="due">
+                                    <Label required htmlFor="due">
                                         Due date
                                     </Label>
 
@@ -149,7 +150,8 @@ const TaskForm = ({
                                         {({ field, form }: any) => (
                                             <DatePicker
                                                 id="due"
-                                                appearance="filled-lighter-shadow"
+                                                required
+                                                appearance="filled-lighter"
                                                 className={styles.control}
                                                 placeholder="Select a date..."
                                                 value={field.value ? new Date(field.value) : null}
