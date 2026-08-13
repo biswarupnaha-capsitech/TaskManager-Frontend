@@ -40,7 +40,7 @@ const TaskList = ({ onEdit, tasks: tasksProp, isLoading: isLoadingProp }: Props)
     if (tasks.length === 0) {
         return (
             <div className="mt-16 rounded-2xl bg-white p-10 text-center shadow-md">
-                <h2 className="text-xl font-semibold text-slate-700">
+                <h2 className="text-lg md:text-xl font-semibold text-slate-700">
                     No tasks Yet
                 </h2>
                 <p className="mt-2 text-slate-500">
@@ -62,11 +62,11 @@ const TaskList = ({ onEdit, tasks: tasksProp, isLoading: isLoadingProp }: Props)
     }
 
     return (
-        <div className="grid gap-6 grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3 py-5">
             {tasks.map((task) => (
                 <div
                     key={task.id}
-                    className="flex flex-col rounded-2xl bg-white p-6 pt-12 shadow-md relative min-h-55"
+                    className="flex flex-col rounded-2xl bg-white p-6 pt-12 shadow-md relative min-h-50"
                 >
                     <span
                         className={`rounded-full absolute top-4 left-4 px-3 py-1 text-xs font-medium ${statusColor[task.status as keyof typeof statusColor]}`}

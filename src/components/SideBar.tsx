@@ -42,8 +42,10 @@ const useStyles = makeStyles({
         boxSizing: "border-box",
         "@media (max-width: 760px)": { display: "none" },
     },
-    brand: { padding: "0 10px 24px" },
-    nav: { display: "flex", flexDirection: "column", gap: "2px" },
+    brand: {
+        padding: "0 10px 24px",
+    },
+    nav: { display: "flex", flexDirection: "column", gap: "8px" },
     section: {
         padding: "22px 10px 8px",
         color: tokens.colorNeutralForeground3,
@@ -52,7 +54,7 @@ const useStyles = makeStyles({
         textTransform: "uppercase",
         letterSpacing: "0.04em",
     },
-    projectButton: { justifyContent: "flex-start", width: "100%" },
+    projectButton: { justifyContent: "flex-start", width: "100%", height: "50px" },
     bottom: { marginTop: "auto" },
     profile: {
         display: "flex",
@@ -64,7 +66,7 @@ const useStyles = makeStyles({
     skeletonRow: {
         display: "flex",
         alignItems: "center",
-        gap: "8px",
+        gap: "12px",
         padding: "6px 10px",
     },
 });
@@ -108,7 +110,7 @@ export function Sidebar({
     return (
         <aside className={styles.root}>
             <div className={styles.brand}>
-                <Text size={500} weight="bold">TaskManager</Text>
+                <img src="/logo.png" alt="TaskManager" className="w-20" />
             </div>
 
             <nav className={styles.nav}>
@@ -133,6 +135,16 @@ export function Sidebar({
                 <Divider />
 
                 <div className="h-full py-5 flex flex-col gap-5">
+                    <Tooltip content="Create a project" relationship="label">
+                        <Button
+                            appearance="subtle"
+                            icon={<Add20Regular />}
+                            className={styles.projectButton}
+                            onClick={onNewProject}
+                        >
+                            New project
+                        </Button>
+                    </Tooltip>
                     {isLoading ? (
                         <Skeleton>
                             {Array.from({ length: 4 }).map((_, i) => (
@@ -176,17 +188,6 @@ export function Sidebar({
                         ))
                     )}
                 </div>
-
-                <Tooltip content="Create a project" relationship="label">
-                    <Button
-                        appearance="subtle"
-                        icon={<Add20Regular />}
-                        className={styles.projectButton}
-                        onClick={onNewProject}
-                    >
-                        New project
-                    </Button>
-                </Tooltip>
             </nav>
 
             <div className={styles.bottom}>

@@ -95,12 +95,12 @@ const ProjectPage = () => {
     }
 
     return (
-        <div className="flex flex-col gap-6 px-20">
+        <div className="flex flex-col gap-6 px-5 md:px-20">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-semibold text-slate-800">{project.title}</h1>
                 <button
                     onClick={() => { setEditingTask(null); setIsModalOpen(true); }}
-                    className="rounded-4xl bg-white px-6 py-3 font-medium text-[#115EA3] shadow-md hover:bg-[#e5e6e7] hover:shadow-lg"
+                    className="text-lg rounded-4xl bg-white px-4 py-1 md:px-6 md:py-3 font-medium text-[#115EA3] shadow-md hover:bg-[#e5e6e7] hover:shadow-lg"
                 >
                     + New Task
                 </button>

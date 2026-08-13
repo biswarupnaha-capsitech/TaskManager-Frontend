@@ -25,7 +25,7 @@ import {
     Add20Regular,
     Dismiss20Regular,
     Home20Regular,
-    Person20Regular,
+    TaskListLtr24Filled,
 } from "@fluentui/react-icons";
 import { useAppDispatch, useAppSelector } from "../app/store";
 import { logout } from "../app/features/authSlice";
@@ -41,6 +41,15 @@ import TaskForm from "../components/TaskForm";
 
 const useStyles = makeStyles({
     shell: { minHeight: "100dvh", backgroundColor: tokens.colorNeutralBackground3 },
+    section: {
+        padding: "22px 10px 8px",
+        color: tokens.colorNeutralForeground3,
+        fontSize: tokens.fontSizeBase200,
+        fontWeight: tokens.fontWeightSemibold,
+        textTransform: "uppercase",
+        letterSpacing: "0.04em",
+    },
+    projectButton: { justifyContent: "flex-start", width: "100%", height: "50px" },
     mobileBar: {
         display: "none",
         "@media (max-width: 760px)": {
@@ -73,6 +82,9 @@ const useStyles = makeStyles({
         alignItems: "center",
         gap: "8px",
         padding: "6px 10px",
+    },
+    proj: {
+        margin: "0 0 10px 10px"
     },
     main: {
         height: "100dvh",
@@ -163,21 +175,32 @@ export function AppLayout() {
                                 onClick={() => setDrawerOpen(false)}
                             />
                         }
-                        className="py-2"
+                        className="py-5"
                     >
-                        TaskManager
+                        <img src="/logo.png" alt="TaskManager" className="w-15" />
                     </DrawerHeaderTitle>
                 </DrawerHeader>
                 <DrawerBody className="flex flex-col items-start">
                     <Button
                         appearance="subtle"
                         icon={<Home20Regular />}
-                        onClick={() => { navigate("/"); setDrawerOpen(false); }}
+                        className={styles.projectButton}
+                        onClick={() => navigate("/")}
                     >
-                        All Tasks
+                        Dashboard
                     </Button>
+                    <Button
+                        appearance="subtle"
+                        icon={<TaskListLtr24Filled />}
+                        className={styles.projectButton}
+                        onClick={() => navigate("/tasks")}
+                    >
+                        All tasks
+                    </Button>
+
+                    <div className={styles.section}>Projects</div>
                     <Divider />
-                    <div className="h-full py-5">
+                    <div className="h-full py-5 flex flex-col gap-2">
                         {isLoading ? (
                             <Skeleton>
                                 {Array.from({ length: 4 }).map((_, i) => (
@@ -187,7 +210,7 @@ export function AppLayout() {
                                 ))}
                             </Skeleton>) :
                             projects.map((p) => (
-                                <div className="flex w-65 justify-between">
+                                <div className="flex w-65 gap-5">
                                     <div
                                         key={p.id}
                                         onClick={() => { navigate(`/projects/${p.id}`); setDrawerOpen(false); }}
@@ -220,22 +243,23 @@ export function AppLayout() {
                                 </div>
                             ))}
                     </div>
+                    <Button
+                        appearance="subtle"
+                        icon={<Add20Regular />}
+                        onClick={() => { setIsProjectModalOpen(true); setDrawerOpen(false); }}
+                        className={styles.proj}
+                    >
+                        New project
+                    </Button>
                     <Divider />
                     <div className="py-5">
-                        <Button
+                        {/* <Button
                             appearance="subtle"
                             icon={<Person20Regular />}
                             onClick={() => { navigate("/profile"); setDrawerOpen(false); }}
                         >
                             Profile
-                        </Button>
-                        <Button
-                            appearance="subtle"
-                            icon={<Add20Regular />}
-                            onClick={() => { setIsProjectModalOpen(true); setDrawerOpen(false); }}
-                        >
-                            New project
-                        </Button>
+                        </Button> */}
 
                         <div className={styles.profile}>
                             <Avatar
