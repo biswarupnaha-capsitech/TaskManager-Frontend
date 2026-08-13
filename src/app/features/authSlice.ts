@@ -33,6 +33,7 @@ const authSlice = createSlice({
                 "tm-access",
                 token
             );
+            window.location.replace("/");
         },
 
         logout: (state) => {

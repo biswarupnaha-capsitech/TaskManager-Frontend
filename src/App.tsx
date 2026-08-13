@@ -4,10 +4,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastProvider } from "./context/ToastContext";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
+import { loginAllTabsListener, logoutAllTabsListener } from "./api/services/authService";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient()
-
-// TypeScript only:
 declare global {
   interface Window {
     __TANSTACK_QUERY_CLIENT__:
@@ -15,9 +15,14 @@ declare global {
     .QueryClient
   }
 }
-
 window.__TANSTACK_QUERY_CLIENT__ = queryClient
+
 function App() {
+  useEffect(() => {
+    logoutAllTabsListener();
+    loginAllTabsListener();
+  }, []);
+
   return (
     <FluentProvider theme={webLightTheme}>
       <QueryClientProvider client={queryClient}>

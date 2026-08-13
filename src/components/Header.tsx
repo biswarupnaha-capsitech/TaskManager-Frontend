@@ -8,7 +8,7 @@ import type { Task } from '../common/types';
 import { authService } from '../api/services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useTasks } from '../hooks/useTasks';
-import {  Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Hamburger } from '@fluentui/react-components';
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Hamburger } from '@fluentui/react-components';
 import { SignOut20Regular } from '@fluentui/react-icons';
 
 const Header = ({ setDrawerOpen, }: {
@@ -27,9 +27,8 @@ const Header = ({ setDrawerOpen, }: {
         <header className=" bg-[#115EA3] w-full fixed shadow-lg z-10">
             <div className="md:w-[75dvw] lg:w-[85dvw] md:md-px-50 px-5 py-8 justify-between flex items-center">
                 <span className='md:hidden'>
-                    <Button
+                    <Hamburger
                         appearance="primary"
-                        icon={<Hamburger />}
                         onClick={() => setDrawerOpen(true)}
                         aria-label="Open navigation"
                     />

@@ -113,8 +113,8 @@ export function AppLayout() {
             .then(data => !data?.status && notify(data?.msg, "error"));
     }, []);
 
-    const fName = user?.name.split("")[0] ?? "";
-    const lName = user?.name.split("")[1] ?? "";
+    const fName = user?.name?.split("")[0] ?? "";
+    const lName = user?.name?.split("")[1] ?? "";
     const initials = `${fName.charAt(0)} ${lName.charAt(0)}`.toUpperCase();
 
     function handleDelete(id: string) {
