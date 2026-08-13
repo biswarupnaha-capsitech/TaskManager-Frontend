@@ -14,7 +14,6 @@ import {
 import {
     Eye24Regular,
     EyeOff24Regular,
-    ClipboardTask24Regular,
 } from "@fluentui/react-icons";
 
 import { Formik } from "formik";
@@ -103,7 +102,7 @@ export default function LoginPage() {
         <div className={styles.root}>
             <Card className={styles.card}>
                 <div className={styles.icon}>
-                    <ClipboardTask24Regular primaryFill="#6D4AFF" fontSize={48} />
+                    <img src="/logo.png" alt="TaskManager" className="w-20" />
                 </div>
 
                 <Text className={styles.title} size={700} weight="semibold">

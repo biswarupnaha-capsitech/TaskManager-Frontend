@@ -17,7 +17,7 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
 import { authService } from "../../api/services/authService";
 import { useToast } from "../../hooks/useToast";
-import { ClipboardTask24Regular, Eye24Regular, EyeOff24Regular } from "@fluentui/react-icons";
+import { Eye24Regular, EyeOff24Regular } from "@fluentui/react-icons";
 
 const schema = Yup.object({
     name: Yup.object({
@@ -53,7 +53,7 @@ const useStyles = makeStyles({
     },
 
     card: {
-        width: "430px",
+        width: "512px",
         borderRadius: "20px",
         padding: "36px",
         boxShadow: tokens.shadow16,
@@ -113,7 +113,7 @@ export default function RegisterPage() {
         <div className={styles.root}>
             <Card className={styles.card}>
                 <div className={styles.icon}>
-                    <ClipboardTask24Regular primaryFill="#6D4AFF" fontSize={48} />
+                    <img src="/logo.png" alt="TaskManager" className="w-20" />
                 </div>
 
                 <Text className={styles.title} size={700} weight="semibold">
@@ -170,30 +170,33 @@ export default function RegisterPage() {
                         isSubmitting,
                     }) => (
                         <form onSubmit={handleSubmit} className={styles.form}>
-                            <Field
-                                label="First Name"
-                                validationMessage={touched.name?.first ? errors.name?.first : ""}
-                            >
-                                <Input
-                                    name="name.first"
-                                    placeholder="Enter your first name"
-                                    value={values.name.first}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                />
-                            </Field>
-                            <Field
-                                label="Last Name"
-                                validationMessage={touched.name?.last ? errors.name?.last : ""}
-                            >
-                                <Input
-                                    name="name.last"
-                                    placeholder="Enter your last name"
-                                    value={values.name.last}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                />
-                            </Field>
+                            <div className="md:flex md:justify-between">
+
+                                <Field
+                                    label="First Name"
+                                    validationMessage={touched.name?.first ? errors.name?.first : ""}
+                                >
+                                    <Input
+                                        name="name.first"
+                                        placeholder="Enter your first name"
+                                        value={values.name.first}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                    />
+                                </Field>
+                                <Field
+                                    label="Last Name"
+                                    validationMessage={touched.name?.last ? errors.name?.last : ""}
+                                >
+                                    <Input
+                                        name="name.last"
+                                        placeholder="Enter your last name"
+                                        value={values.name.last}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                    />
+                                </Field>
+                            </div>
                             <Field
                                 label="Email"
                                 validationMessage={touched.email ? errors.email : ""}
