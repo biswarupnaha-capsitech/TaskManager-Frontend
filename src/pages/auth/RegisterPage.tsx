@@ -173,6 +173,7 @@ export default function RegisterPage() {
                             <div className="md:flex md:justify-between">
 
                                 <Field
+                                    id="fname"
                                     label="First Name"
                                     validationMessage={touched.name?.first ? errors.name?.first : ""}
                                 >
@@ -185,6 +186,7 @@ export default function RegisterPage() {
                                     />
                                 </Field>
                                 <Field
+                                    id="lname"
                                     label="Last Name"
                                     validationMessage={touched.name?.last ? errors.name?.last : ""}
                                 >
@@ -198,6 +200,7 @@ export default function RegisterPage() {
                                 </Field>
                             </div>
                             <Field
+                                id="email"
                                 label="Email"
                                 validationMessage={touched.email ? errors.email : ""}
                             >
@@ -211,6 +214,7 @@ export default function RegisterPage() {
                             </Field>
 
                             <Field
+                                id="phn"
                                 label="Phone Number"
                                 validationMessage={touched.phoneNumber ? errors.phoneNumber : ""}
                             >
@@ -223,6 +227,7 @@ export default function RegisterPage() {
                             </Field>
 
                             <Field
+                                id="password"
                                 label="Password"
                                 validationMessage={touched.password ? errors.password : ""}
                             >
@@ -252,6 +257,7 @@ export default function RegisterPage() {
                                 />
                             </Field>
                             <Field
+                                id="cpassword"
                                 label="Confirm Password"
                                 validationMessage={touched.confirmPassword ? errors.confirmPassword : ""}
                             >

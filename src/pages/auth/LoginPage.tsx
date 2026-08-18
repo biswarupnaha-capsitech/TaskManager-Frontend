@@ -151,6 +151,7 @@ export default function LoginPage() {
                         <form onSubmit={handleSubmit} className={styles.form}>
                             <Field
                                 label="Email"
+                                id="email"
                                 validationMessage={touched.userName ? errors.userName : ""}
                             >
                                 <Input
@@ -164,6 +165,7 @@ export default function LoginPage() {
 
                             <Field
                                 label="Password"
+                                id="password"
                                 validationMessage={touched.password ? errors.password : ""}
                             >
                                 <Input
