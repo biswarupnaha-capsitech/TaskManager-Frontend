@@ -7,7 +7,17 @@ import { Provider } from "react-redux";
 import { loginAllTabsListener, logoutAllTabsListener } from "./api/services/authService";
 import { useEffect } from "react";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 30 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      retry: 1,
+    },
+  },
+});
 declare global {
   interface Window {
     __TANSTACK_QUERY_CLIENT__:

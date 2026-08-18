@@ -5,10 +5,11 @@ interface AuthState {
     token: string | null;
     user: User | null;
 }
+const storedUser = localStorage.getItem("tm-user");
 
 const initialState: AuthState = {
     token: localStorage.getItem("tm-access"),
-    user: JSON.parse(localStorage.getItem("tm-user")!)
+    user: storedUser ? JSON.parse(storedUser) : null,
 };
 
 const authSlice = createSlice({

@@ -4,14 +4,14 @@ import { Status } from "../common/enums";
 import { useTasks } from "../hooks/useTasks";
 import type { Task } from "../common/types";
 import { useToast } from "../hooks/useToast";
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, Input, Label, makeStyles, Textarea } from "@fluentui/react-components";
-import { BanIcon } from "lucide-react";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, Input, Label, makeStyles, Textarea, Title3 } from "@fluentui/react-components";
 import { useAppSelector } from "../app/store";
 import { DatePicker } from "@fluentui/react-datepicker-compat"
 
 const useStyles = makeStyles({
     control: {
         maxWidth: "300px",
+        opacity: "100%"
     },
 });
 
@@ -66,15 +66,9 @@ const TaskForm = ({
                 >
                     <Form>
                         <DialogBody className="p-6">
-                            <DialogTitle className="text-2xl font-semibold" action={
-                                <Button
-                                    appearance="subtle"
-                                    icon={<BanIcon />}
-                                    onClick={() => setIsModalOpen(false)}
-                                />
-                            }>
+                            <Title3 className="text-2xl font-semibold">
                                 {toEdit ? "Update Task" : "Create Task"}
-                            </DialogTitle>
+                            </Title3>
 
                             <DialogContent className="mt-6 flex flex-col gap-5">
                                 {/* Title */}
@@ -87,7 +81,6 @@ const TaskForm = ({
                                         {({ field }: any) => (
                                             <Input
                                                 {...field}
-                                                id="title"
                                                 size="large"
                                                 appearance="outline"
                                                 placeholder="Enter task title"
@@ -108,7 +101,6 @@ const TaskForm = ({
                                         {({ field }: any) => (
                                             <Textarea
                                                 {...field}
-                                                id="description"
                                                 resize="vertical"
                                                 rows={5}
                                                 placeholder="Describe your task..."
@@ -128,7 +120,6 @@ const TaskForm = ({
                                         {({ field }: any) => (
                                             <select
                                                 {...field}
-                                                id="project"
                                                 required
                                                 className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500"
                                             >
@@ -140,6 +131,7 @@ const TaskForm = ({
                                         )}
                                     </Field>
                                 </div>
+                                
                                 {/* Due */}
                                 <div className="flex flex-col gap-2">
                                     <Label required htmlFor="due">
@@ -149,9 +141,8 @@ const TaskForm = ({
                                     <Field name="dueDate">
                                         {({ field, form }: any) => (
                                             <DatePicker
-                                                id="due"
                                                 required
-                                                appearance="filled-lighter"
+                                                appearance="underline"
                                                 className={styles.control}
                                                 placeholder="Select a date..."
                                                 value={field.value ? new Date(field.value) : null}
@@ -175,7 +166,6 @@ const TaskForm = ({
                                             {({ field }: any) => (
                                                 <select
                                                     {...field}
-                                                    id="status"
                                                     className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500"
                                                 >
                                                     <option value={Status.Pending}>Pending</option>

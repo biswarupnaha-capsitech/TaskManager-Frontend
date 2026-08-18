@@ -4,7 +4,6 @@ import type { Project, ProjectWithTasks } from "../common/types"
 import { useAppDispatch, useAppSelector } from "../app/store"
 import { addProjectLocal, removeProjectLocal, setProjects, updateProjectLocal } from "../app/features/projectSlice"
 import { getProjects } from "../api/services/projectService"
-import { setTasks } from "../app/features/taskSlice"
 
 export function useProjects() {
     const dispatch = useAppDispatch()
@@ -17,8 +16,8 @@ export function useProjects() {
             const data = await getProjects();
             const fetched: ProjectWithTasks[] = data?.result?.results ?? []
             dispatch(setProjects(fetched))
-            const allTasks = fetched.flatMap(project => project.tasks)
-            dispatch(setTasks(allTasks))
+            // const allTasks = fetched.flatMap(project => project.tasks)
+            // dispatch(setTasks(allTasks))
             return { msg: data?.message, status: data?.status }
         },
         staleTime: 5 * 60 * 1000,

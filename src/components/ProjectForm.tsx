@@ -2,8 +2,7 @@ import React from "react";
 import { Formik, Form, Field } from "formik";
 import type { Project } from "../common/types";
 import { useToast } from "../hooks/useToast";
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, Input, Label, Textarea } from "@fluentui/react-components";
-import { BanIcon } from "lucide-react";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, Input, Label, Textarea, Title3 } from "@fluentui/react-components";
 import { useProjects } from "../hooks/useProjects";
 
 const ProjectForm = ({
@@ -54,16 +53,7 @@ const ProjectForm = ({
                 >
                     <Form>
                         <DialogBody className="p-6">
-                            <DialogTitle className="text-2xl font-semibold" action={
-                                <Button
-                                    appearance="subtle"
-                                    icon={<BanIcon />}
-                                    onClick={() => setIsModalOpen(false)}
-                                />
-                            }>
-                                {toEdit ? "Update Project" : "Create Project"}
-                            </DialogTitle>
-
+                            <Title3>{toEdit ? "Update Project" : "Create Project"}</Title3>
                             <DialogContent className="mt-6 flex flex-col gap-5">
                                 {/* Title */}
                                 <div className="flex flex-col gap-2">
@@ -133,14 +123,14 @@ const ProjectForm = ({
                                                         form.setFieldValue("isCompleted", !field.value)
                                                     }
                                                     className={`relative flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${field.value
-                                                            ? "bg-blue-600"
-                                                            : "bg-neutral-300"
+                                                        ? "bg-blue-600"
+                                                        : "bg-neutral-300"
                                                         }`}
                                                 >
                                                     <span
                                                         className={`h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200 ${field.value
-                                                                ? "translate-x-5"
-                                                                : "translate-x-0.5"
+                                                            ? "translate-x-5"
+                                                            : "translate-x-0.5"
                                                             }`}
                                                     />
                                                 </button>
