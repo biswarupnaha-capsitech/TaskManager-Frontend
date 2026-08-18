@@ -4,20 +4,20 @@ import type { Project, ProjectWithTasks } from "../common/types"
 import { useAppDispatch, useAppSelector } from "../app/store"
 import { addProjectLocal, removeProjectLocal, setProjects, updateProjectLocal } from "../app/features/projectSlice"
 import { getProjects } from "../api/services/projectService"
+import { useTasks } from "./useTasks"
 
 export function useProjects() {
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
     const { projects } = useAppSelector(state => state.projects)
-
+    const { fetchTasks } = useTasks();
     const query = useQuery({
         queryKey: ["projects"],
         queryFn: async () => {
             const data = await getProjects();
             const fetched: ProjectWithTasks[] = data?.result?.results ?? []
             dispatch(setProjects(fetched))
-            // const allTasks = fetched.flatMap(project => project.tasks)
-            // dispatch(setTasks(allTasks))
+
             return { msg: data?.message, status: data?.status }
         },
         staleTime: 5 * 60 * 1000,
@@ -38,6 +38,7 @@ export function useProjects() {
             updateProject(id, updates),
         onMutate: async ({ id, updates }) => {
             dispatch(updateProjectLocal({ id, updates }))
+            if (updates.isCompleted) fetchTasks();
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["projects"] })
