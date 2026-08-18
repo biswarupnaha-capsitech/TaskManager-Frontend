@@ -110,7 +110,7 @@ export function Sidebar({
     return (
         <aside className={styles.root}>
             <div className={styles.brand}>
-                <img src="/logo.png" alt="TaskManager" className="w-20" />
+                <img src="/logo.png" alt="TaskManager" width={70} />
             </div>
 
             <nav className={styles.nav}>
