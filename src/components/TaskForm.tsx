@@ -11,7 +11,8 @@ import { DatePicker } from "@fluentui/react-datepicker-compat"
 const useStyles = makeStyles({
     control: {
         maxWidth: "300px",
-        opacity: "100%"
+        opacity: "1",
+        backgroundColor: "white"
     },
 });
 
@@ -131,7 +132,7 @@ const TaskForm = ({
                                         )}
                                     </Field>
                                 </div>
-                                
+
                                 {/* Due */}
                                 <div className="flex flex-col gap-2">
                                     <Label required htmlFor="due">
@@ -141,7 +142,6 @@ const TaskForm = ({
                                     <Field name="dueDate">
                                         {({ field, form }: any) => (
                                             <DatePicker
-                                                required
                                                 appearance="underline"
                                                 className={styles.control}
                                                 placeholder="Select a date..."
@@ -150,6 +150,7 @@ const TaskForm = ({
                                                     form.setFieldValue("dueDate", date ? date.toISOString() : null);
                                                 }}
                                                 onBlur={() => form.setFieldTouched("dueDate", true)}
+                                                required
                                             />
                                         )}
                                     </Field>

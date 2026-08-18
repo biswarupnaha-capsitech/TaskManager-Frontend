@@ -59,11 +59,46 @@ function StatCard({
     );
 }
 
-function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
+function ChartCard({
+    title,
+    loading,
+    children,
+}: {
+    title: string;
+    loading: boolean;
+    children: React.ReactNode;
+}) {
     return (
-        <div className="flex flex-col rounded-2xl bg-white p-6 shadow-md">
-            <h3 className="mb-4 text-lg font-semibold text-slate-800">{title}</h3>
-            <div className="h-72 w-full">{children}</div>
+        <div className="rounded-2xl bg-white p-6 shadow-md">
+            <h3 className="mb-4 text-lg font-semibold text-slate-800">
+                {title}
+            </h3>
+
+            <div className="relative h-72 w-full">
+                <div
+                    className={
+                        loading
+                            ? "invisible"
+                            : "visible h-full w-full"
+                    }
+                >
+                    {children}
+                </div>
+
+                {loading && (
+                    <div className="absolute inset-0">
+                        <Skeleton>
+                            <SkeletonItem
+                                style={{
+                                    height: "100%",
+                                    width: "100%",
+                                    borderRadius: "12px",
+                                }}
+                            />
+                        </Skeleton>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
@@ -160,12 +195,8 @@ const DashboardPage = () => {
 
             {/* Charts */}
             <div className="grid gap-6 lg:grid-cols-2">
-                <ChartCard title="Task Status Breakdown">
-                    {isLoading ? (
-                        <Skeleton>
-                            <SkeletonItem style={{ height: "100%", width: "100%", borderRadius: "12px" }} />
-                        </Skeleton>
-                    ) : totalTasks === 0 ? (
+                <ChartCard title="Task Status Breakdown" loading={isLoading}>
+                     {totalTasks === 0 ? (
                         <div className="flex h-full items-center justify-center text-slate-400">
                             No tasks yet
                         </div>
@@ -184,14 +215,14 @@ const DashboardPage = () => {
                                         <Cell key={i} fill={entry.color} />
                                     ))}
                                 </Pie>
-                                <Legend verticalAlign="bottom" height={36} />
+                                <Legend position="bottom" height={36} />
                                 <RechartsTooltip />
                             </PieChart>
                         </ResponsiveContainer>
                     )}
                 </ChartCard>
 
-                <ChartCard title="Projects by Completion">
+                <ChartCard title="Projects by Completion" loading={isLoading}>
                     {isLoading ? (
                         <Skeleton>
                             <SkeletonItem style={{ height: "100%", width: "100%", borderRadius: "12px" }} />

@@ -102,7 +102,7 @@ export default function LoginPage() {
         <div className={styles.root}>
             <Card className={styles.card}>
                 <div className={styles.icon}>
-                    <img src="/logo.png" alt="TaskManager" className="w-20" />
+                    <img src="/logo.webp" alt="TaskManager" className="w-20" />
                 </div>
 
                 <Text className={styles.title} size={700} weight="semibold">
