@@ -177,7 +177,7 @@ export function AppLayout() {
                         }
                         className="py-5"
                     >
-                        <img src="/logo.png" alt="TaskManager" width={70} />
+                        <img src="/logo.webp" alt="TaskManager" width={70} />
                     </DrawerHeaderTitle>
                 </DrawerHeader>
                 <DrawerBody className="flex flex-col items-start">
