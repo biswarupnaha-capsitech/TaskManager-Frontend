@@ -152,6 +152,7 @@ export default function LoginPage() {
                             <Field
                                 label="Email"
                                 id="email"
+                                aria-autocomplete="inline"
                                 validationMessage={touched.userName ? errors.userName : ""}
                             >
                                 <Input
@@ -166,6 +167,7 @@ export default function LoginPage() {
                             <Field
                                 label="Password"
                                 id="password"
+                                aria-autocomplete="inline"
                                 validationMessage={touched.password ? errors.password : ""}
                             >
                                 <Input
